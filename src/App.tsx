@@ -22,8 +22,30 @@ export default function App() {
   const [selectedEpochId, setSelectedEpochId] = useState<string | null>(null);
   const [selectedDossierId, setSelectedDossierId] = useState<string | null>(null);
   const [activeJourney, setActiveJourney] = useState<HistoricalJourney | null>(null);
-  const [userXp, setUserXp] = useState<number>(350);
-  const [unlockedBadges, setUnlockedBadges] = useState<string[]>([]);
+  const [userXp, setUserXp] = useState<number>(() => {
+    try {
+      const saved = localStorage.getItem('anvaya_user_xp');
+      return saved ? JSON.parse(saved) : 350;
+    } catch {
+      return 350;
+    }
+  });
+  const [unlockedBadges, setUnlockedBadges] = useState<string[]>(() => {
+    try {
+      const saved = localStorage.getItem('anvaya_unlocked_badges');
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
+  const [completedJourneyIds, setCompletedJourneyIds] = useState<string[]>(() => {
+    try {
+      const saved = localStorage.getItem('anvaya_completed_journey_ids');
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
   const [exploredCulturalIds, setExploredCulturalIds] = useState<string[]>(() => {
     try {
       const saved = localStorage.getItem('anvaya_explored_cultural_ids');
@@ -35,11 +57,14 @@ export default function App() {
 
   useEffect(() => {
     try {
+      localStorage.setItem('anvaya_user_xp', JSON.stringify(userXp));
+      localStorage.setItem('anvaya_unlocked_badges', JSON.stringify(unlockedBadges));
+      localStorage.setItem('anvaya_completed_journey_ids', JSON.stringify(completedJourneyIds));
       localStorage.setItem('anvaya_explored_cultural_ids', JSON.stringify(exploredCulturalIds));
     } catch {
       // ignore
     }
-  }, [exploredCulturalIds]);
+  }, [userXp, unlockedBadges, completedJourneyIds, exploredCulturalIds]);
 
   // Keyboard shortcut for ⌘K / Ctrl+K search bar
   useEffect(() => {
@@ -118,8 +143,13 @@ export default function App() {
     handleNavigateToDossier(dossier.id);
   };
 
-  const handleCompleteJourney = (awardedXp: number, badgeId: string) => {
-    setUserXp((prev) => prev + awardedXp);
+  const handleCompleteJourney = (journeyId: string, awardedXp: number, badgeId: string) => {
+    // Only award XP if this journey has not been completed before
+    if (!completedJourneyIds.includes(journeyId)) {
+      setUserXp((prev) => prev + awardedXp);
+      setCompletedJourneyIds((prev) => [...prev, journeyId]);
+    }
+    // Always add badge (idempotent check inside)
     setUnlockedBadges((prev) => (prev.includes(badgeId) ? prev : [...prev, badgeId]));
   };
 
@@ -153,6 +183,11 @@ export default function App() {
                 setActiveJourney(journey);
                 setCurrentScreen('journey-archives');
               }}
+              exploredCulturalIds={exploredCulturalIds}
+              onExploreCulturalItem={handleAwardCulturalXp}
+              onNavigateToCultureWithState={(stateName) => {
+                setCurrentScreen('cultural');
+              }}
               onNavigateToChronology={handleNavigateToChronology}
               onNavigateToDossier={handleNavigateToDossier}
               onNavigateToCulture={handleNavigateToCulture}
@@ -169,7 +204,14 @@ export default function App() {
             />
           )}
           {currentScreen === 'vitrine' && <VitrineScreen />}
-          {currentScreen === 'passport' && <PassportScreen />}
+          {currentScreen === 'passport' && (
+            <PassportScreen
+              userXp={userXp}
+              unlockedBadges={unlockedBadges}
+              completedJourneyIds={completedJourneyIds}
+              exploredCulturalIds={exploredCulturalIds}
+            />
+          )}
           {currentScreen === 'chronology' && (
             <ChronologyScreen
               selectedEpochId={selectedEpochId}
@@ -194,6 +236,7 @@ export default function App() {
               journey={activeJourney || HISTORICAL_JOURNEYS[0]}
               userXp={userXp}
               unlockedBadges={unlockedBadges}
+              completedJourneyIds={completedJourneyIds}
               onBackToMap={() => {
                 handleNavigateToCartography(activeJourney?.landmarkId || 'brihadisvara-thanjavur');
               }}

@@ -125,20 +125,28 @@ export const Header: React.FC<HeaderProps> = ({
 
           {/* Quick Collection Metric & XP */}
           <div className="hidden md:flex items-center gap-2">
-            <div className="flex items-center gap-1.5 px-2.5 py-1 bg-[#F3ECE2] border border-[#B8863B]/30 rounded-xs text-xs">
+            <button
+              onClick={() => onScreenChange && onScreenChange('cultural')}
+              className="flex items-center gap-1.5 px-2.5 py-1 bg-[#F3ECE2] hover:bg-[#FAF7F2] border border-[#B8863B]/30 hover:border-[#A8422B] rounded-xs text-xs transition-colors cursor-pointer"
+              title="View Living Heritage Collection"
+            >
               <BookOpen className="w-3.5 h-3.5 text-[#A8422B]" />
               <span className="font-mono text-[11px] font-medium text-[#1A2744]">
                 {t('sites_artifacts_count')}
               </span>
-            </div>
+            </button>
 
             {typeof userXp === 'number' && (
-              <div className="flex items-center gap-1 px-2.5 py-1 bg-[#FAF2EB] border border-[#A8422B]/40 rounded-xs text-xs">
+              <button
+                onClick={() => onScreenChange && onScreenChange('passport')}
+                className="flex items-center gap-1 px-2.5 py-1 bg-[#FAF2EB] hover:bg-[#FAF7F2] border border-[#A8422B]/40 hover:border-[#A8422B] rounded-xs text-xs transition-colors cursor-pointer shadow-2xs"
+                title="View Heritage Passport & Badges"
+              >
                 <Sparkles className="w-3 h-3 text-[#A8422B]" />
                 <span className="font-mono text-[11px] font-bold text-[#882B16]">
                   {userXp} XP
                 </span>
-              </div>
+              </button>
             )}
           </div>
         </div>

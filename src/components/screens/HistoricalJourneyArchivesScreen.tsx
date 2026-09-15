@@ -24,8 +24,9 @@ interface HistoricalJourneyArchivesScreenProps {
   journey: HistoricalJourney;
   userXp: number;
   unlockedBadges: string[];
+  completedJourneyIds?: string[];
   onBackToMap: () => void;
-  onCompleteJourney: (awardedXp: number, badgeId: string) => void;
+  onCompleteJourney: (journeyId: string, awardedXp: number, badgeId: string) => void;
 }
 
 type ViewMode = 'archive-overview' | 'interactive-journey' | 'completed';
@@ -36,6 +37,7 @@ export const HistoricalJourneyArchivesScreen: React.FC<
   journey,
   userXp,
   unlockedBadges,
+  completedJourneyIds = [],
   onBackToMap,
   onCompleteJourney,
 }) => {
@@ -49,6 +51,7 @@ export const HistoricalJourneyArchivesScreen: React.FC<
   >([]);
 
   const isBadgeAlreadyUnlocked = unlockedBadges.includes(journey.awardedBadge.id);
+  const isJourneyAlreadyCompleted = completedJourneyIds.includes(journey.id);
   const currentScenario: JourneyScenario = journey.scenarios[currentScenarioIndex];
   const isLastScenario = currentScenarioIndex === journey.scenarios.length - 1;
 
@@ -83,7 +86,7 @@ export const HistoricalJourneyArchivesScreen: React.FC<
 
     if (isLastScenario) {
       setViewMode('completed');
-      onCompleteJourney(journey.totalXp, journey.awardedBadge.id);
+      onCompleteJourney(journey.id, journey.totalXp, journey.awardedBadge.id);
     } else {
       setCurrentScenarioIndex((prev) => prev + 1);
       setSelectedOption(null);
@@ -673,10 +676,10 @@ export const HistoricalJourneyArchivesScreen: React.FC<
                   <Sparkles className="w-5 h-5 text-[#A8422B]" />
                   <div className="text-left">
                     <span className="text-[10px] font-mono text-[#8A726C] block uppercase">
-                      Expedition XP Awarded
+                      {isJourneyAlreadyCompleted ? 'Expedition XP Previously Acquired' : 'Expedition XP Awarded'}
                     </span>
                     <span className="font-serif-display font-bold text-base text-[#A8422B]">
-                      +{journey.totalXp} XP Added to Passport
+                      +{journey.totalXp} XP {isJourneyAlreadyCompleted ? '(Recorded in Passport)' : 'Added to Passport'}
                     </span>
                   </div>
                 </div>
