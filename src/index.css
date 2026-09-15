@@ -1,0 +1,95 @@
+@import url('https://fonts.googleapis.com/css2?family=Anek+Devanagari:wght@100..800&family=Anek+Latin:wght@100..800&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Anek Devanagari", "Anek Latin", system-ui, -apple-system, sans-serif;
+  --font-serif: "Anek Devanagari", "Anek Latin", system-ui, -apple-system, sans-serif;
+  --font-display: "Anek Devanagari", "Anek Latin", system-ui, -apple-system, sans-serif;
+}
+
+@layer base {
+  :root {
+    --font-display: "Anek Devanagari", "Anek Latin", system-ui, -apple-system, sans-serif;
+    --font-sans: "Anek Devanagari", "Anek Latin", system-ui, -apple-system, sans-serif;
+    --font-serif: "Anek Devanagari", "Anek Latin", system-ui, -apple-system, sans-serif;
+  }
+
+  *, ::before, ::after {
+    font-family: "Anek Devanagari", "Anek Latin", system-ui, -apple-system, sans-serif;
+  }
+
+  html,
+  body {
+    font-family: "Anek Devanagari", "Anek Latin", system-ui, -apple-system, sans-serif;
+    background-color: #faf7f2;
+    color: #191b21;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  .font-display,
+  .font-serif-display {
+    font-family: "Anek Devanagari", "Anek Latin", system-ui, -apple-system, sans-serif;
+  }
+}
+
+.font-sans-ui {
+  font-family: "Anek Devanagari", "Anek Latin", system-ui, -apple-system, sans-serif;
+}
+
+.font-serif-display {
+  font-family: "Anek Devanagari", "Anek Latin", system-ui, -apple-system, sans-serif;
+}
+
+.font-serif {
+  font-family: "Anek Devanagari", "Anek Latin", system-ui, -apple-system, sans-serif;
+}
+
+/* Archival typography tokens from Stitch Spec */
+.label-caps {
+  font-family: "Anek Latin", system-ui, sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 16px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.label-mono-spatial {
+  font-family: "Anek Latin", monospace, system-ui;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 14px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* Vitrine & Stamp custom shapes */
+.octagonal-seal {
+  clip-path: polygon(
+    14% 0%,
+    86% 0%,
+    100% 14%,
+    100% 86%,
+    86% 100%,
+    14% 100%,
+    0% 86%,
+    0% 14%
+  );
+}
+
+.subtle-scroll::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+.subtle-scroll::-webkit-scrollbar-thumb {
+  background: rgba(184, 134, 59, 0.25);
+  border-radius: 4px;
+}
+.subtle-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
