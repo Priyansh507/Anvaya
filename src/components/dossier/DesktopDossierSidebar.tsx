@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { HeritageLandmark, HistoricalJourney, CulturalItem } from '../../types';
 import { getJourneyByLandmarkId } from '../../data/historicalJourneys';
+import { getRelatedContentForLandmark } from '../../utils/crossNavigation';
 import {
   Volume2,
   Columns,
@@ -14,12 +15,14 @@ import {
   MapPin,
   Calendar,
   Layers,
+  ScrollText,
 } from 'lucide-react';
 import { CoordinateChip } from '../common/CoordinateChip';
 import { EraBadge } from '../common/EraBadge';
 import { useLanguage } from '../../context/LanguageContext';
 import { StateCulturalItemsPanel } from '../cultural/StateCulturalItemsPanel';
 import { CulturalItemDetailModal } from '../cultural/CulturalItemDetailModal';
+import { CrossNavigationPanel } from '../common/CrossNavigationPanel';
 
 interface DesktopDossierSidebarProps {
   landmark: HeritageLandmark | null;
@@ -29,6 +32,9 @@ interface DesktopDossierSidebarProps {
   exploredCulturalIds?: string[];
   onExploreCulturalItem?: (itemId: string, xpReward: number) => void;
   onViewAllCulture?: (stateName: string) => void;
+  onNavigateToChronology?: (dynastyId?: string, epochId?: string) => void;
+  onNavigateToDossier?: (dossierId: string) => void;
+  onNavigateToCulture?: (culturalId?: string, stateName?: string) => void;
 }
 
 export const DesktopDossierSidebar: React.FC<DesktopDossierSidebarProps> = ({
@@ -39,6 +45,9 @@ export const DesktopDossierSidebar: React.FC<DesktopDossierSidebarProps> = ({
   exploredCulturalIds = [],
   onExploreCulturalItem,
   onViewAllCulture,
+  onNavigateToChronology,
+  onNavigateToDossier,
+  onNavigateToCulture,
 }) => {
   const { language, t, getLandmarkTranslation } = useLanguage();
   const [activeTab, setActiveTab] = useState<'history' | 'architecture' | 'audio' | 'culture'>('history');
@@ -49,6 +58,7 @@ export const DesktopDossierSidebar: React.FC<DesktopDossierSidebarProps> = ({
 
   const availableJourney = getJourneyByLandmarkId(landmark.id);
   const lTrans = getLandmarkTranslation(landmark.id);
+  const relatedContent = getRelatedContentForLandmark(landmark.id);
 
   return (
     <aside className="w-[410px] xl:w-[470px] h-full flex flex-col bg-[#FAF7F2] border-l border-[#B8863B]/30 shadow-xl shrink-0 overflow-hidden z-20 animate-fade-in">
@@ -90,7 +100,7 @@ export const DesktopDossierSidebar: React.FC<DesktopDossierSidebarProps> = ({
         </div>
 
         {/* Primary Action Button */}
-        <div className="mt-3">
+        <div className="mt-3 space-y-2">
           {availableJourney && onStartJourney ? (
             <button
               onClick={() => onStartJourney(availableJourney)}
@@ -117,6 +127,59 @@ export const DesktopDossierSidebar: React.FC<DesktopDossierSidebarProps> = ({
               </button>
             </div>
           )}
+
+          {/* Quick Cross-Section Navigation Actions */}
+          <div className="grid grid-cols-3 gap-1.5 pt-1">
+            {onNavigateToChronology && (
+              <button
+                onClick={() => {
+                  const chron = relatedContent.chronology[0];
+                  onNavigateToChronology(chron?.id);
+                }}
+                className="px-2 py-1.5 bg-[#FAF7F2] hover:bg-[#F3ECE2] text-[#1A2744] border border-[#1A2744]/25 hover:border-[#1A2744] rounded-xs text-[10px] font-bold uppercase tracking-wider flex items-center justify-center gap-1 transition-colors cursor-pointer"
+                title="View in Dynastic Chronology"
+              >
+                <History className="w-3 h-3 text-[#1A2744]" />
+                <span className="truncate">Chronology</span>
+              </button>
+            )}
+
+            {onNavigateToDossier && (
+              <button
+                onClick={() => {
+                  const dos = relatedContent.dossiers[0];
+                  if (dos) {
+                    onNavigateToDossier(dos.id);
+                  } else {
+                    onNavigateToDossier('dos-thanjavur-epigraph');
+                  }
+                }}
+                className="px-2 py-1.5 bg-[#FAF7F2] hover:bg-[#F3ECE2] text-[#684300] border border-[#B8863B]/35 hover:border-[#B8863B] rounded-xs text-[10px] font-bold uppercase tracking-wider flex items-center justify-center gap-1 transition-colors cursor-pointer"
+                title="Open Curatorial Research Dossier"
+              >
+                <ScrollText className="w-3 h-3 text-[#B8863B]" />
+                <span className="truncate">Dossier</span>
+              </button>
+            )}
+
+            {(onNavigateToCulture || onViewAllCulture) && (
+              <button
+                onClick={() => {
+                  const state = landmark.state || landmark.region.split(',').pop()?.trim() || '';
+                  if (onNavigateToCulture) {
+                    onNavigateToCulture(undefined, state);
+                  } else if (onViewAllCulture) {
+                    onViewAllCulture(state);
+                  }
+                }}
+                className="px-2 py-1.5 bg-[#FAF7F2] hover:bg-[#F3ECE2] text-[#882B16] border border-[#A8422B]/30 hover:border-[#A8422B] rounded-xs text-[10px] font-bold uppercase tracking-wider flex items-center justify-center gap-1 transition-colors cursor-pointer"
+                title="Explore Living Culture"
+              >
+                <Sparkles className="w-3 h-3 text-[#A8422B]" />
+                <span className="truncate">Culture</span>
+              </button>
+            )}
+          </div>
         </div>
       </div>
 
@@ -223,6 +286,56 @@ export const DesktopDossierSidebar: React.FC<DesktopDossierSidebarProps> = ({
                 ))}
               </div>
             </div>
+
+            {/* Cross-Section Navigation: Related Content */}
+            {(relatedContent.dossiers.length > 0 || relatedContent.chronology.length > 0 || relatedContent.culture.length > 0) && (
+              <div className="pt-4 border-t border-[#B8863B]/20 space-y-4">
+                <h4 className="label-caps text-[#684300] text-[10px] font-bold flex items-center gap-1.5">
+                  <Layers className="w-3 h-3 text-[#B8863B]" />
+                  EXPLORE RELATED CONTENT
+                </h4>
+
+                {relatedContent.dossiers.length > 0 && onNavigateToDossier && (
+                  <CrossNavigationPanel
+                    title="Research Dossiers & Evidence"
+                    links={relatedContent.dossiers}
+                    onNavigate={(link) => {
+                      if (link.type === 'dossier') {
+                        onNavigateToDossier(link.id);
+                      }
+                    }}
+                  />
+                )}
+
+                {relatedContent.chronology.length > 0 && onNavigateToChronology && (
+                  <CrossNavigationPanel
+                    title="Historical Period & Dynasty"
+                    links={relatedContent.chronology}
+                    onNavigate={(link) => {
+                      if (link.type === 'chronology') {
+                        onNavigateToChronology(link.id);
+                      }
+                    }}
+                  />
+                )}
+
+                {relatedContent.culture.length > 0 && (onNavigateToCulture || onViewAllCulture) && (
+                  <CrossNavigationPanel
+                    title="Living Cultural Traditions"
+                    links={relatedContent.culture}
+                    onNavigate={(link) => {
+                      if (link.type === 'culture') {
+                        if (onNavigateToCulture) {
+                          onNavigateToCulture(link.id);
+                        } else if (onViewAllCulture) {
+                          onViewAllCulture(landmark.state || '');
+                        }
+                      }
+                    }}
+                  />
+                )}
+              </div>
+            )}
           </div>
         )}
 

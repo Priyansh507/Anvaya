@@ -20,6 +20,8 @@ interface StateCultureModalProps {
   exploredItemIds?: string[];
   onExploreItem?: (itemId: string, xpReward: number) => void;
   onNavigateToCulturalScreen?: (stateName: string) => void;
+  onNavigateToCartography?: (landmarkId: string) => void;
+  onNavigateToChronology?: (dynastyId?: string, epochId?: string) => void;
 }
 
 export const StateCultureModal: React.FC<StateCultureModalProps> = ({
@@ -29,6 +31,8 @@ export const StateCultureModal: React.FC<StateCultureModalProps> = ({
   exploredItemIds = [],
   onExploreItem,
   onNavigateToCulturalScreen,
+  onNavigateToCartography,
+  onNavigateToChronology,
 }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [activeItem, setActiveItem] = useState<CulturalItem | null>(null);
@@ -201,6 +205,16 @@ export const StateCultureModal: React.FC<StateCultureModalProps> = ({
             if (onExploreItem) {
               onExploreItem(itemId, xp);
             }
+          }}
+          onNavigateToCartography={(landmarkId) => {
+            setActiveItem(null);
+            onClose();
+            if (onNavigateToCartography) onNavigateToCartography(landmarkId);
+          }}
+          onNavigateToChronology={(dynastyId, epochId) => {
+            setActiveItem(null);
+            onClose();
+            if (onNavigateToChronology) onNavigateToChronology(dynastyId, epochId);
           }}
         />
       )}

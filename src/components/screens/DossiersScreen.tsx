@@ -23,13 +23,23 @@ import {
   X,
 } from 'lucide-react';
 import { CoordinateChip } from '../common/CoordinateChip';
+import { getRelatedContentForDossier } from '../../utils/crossNavigation';
+import { CrossNavigationPanel, type CrossNavigationLink } from '../common/CrossNavigationPanel';
 
 interface DossiersScreenProps {
+  selectedDossierId?: string | null;
   onSelectLandmark?: (landmarkId: string) => void;
+  onNavigateToChronology?: (dynastyId?: string, epochId?: string) => void;
+  onNavigateToCulture?: (culturalId?: string, stateName?: string) => void;
+  onStartJourney?: (journeyId: string) => void;
 }
 
 export const DossiersScreen: React.FC<DossiersScreenProps> = ({
+  selectedDossierId,
   onSelectLandmark,
+  onNavigateToChronology,
+  onNavigateToCulture,
+  onStartJourney,
 }) => {
   const [selectedType, setSelectedType] = useState<'all' | DossierEvidenceType>('all');
   const [searchQuery, setSearchQuery] = useState('');
@@ -43,6 +53,17 @@ export const DossiersScreen: React.FC<DossiersScreenProps> = ({
     }
   });
   const [isMobileReaderOpen, setIsMobileReaderOpen] = useState(false);
+
+  // Sync with external dossier selection from cross-navigation
+  useEffect(() => {
+    if (selectedDossierId) {
+      const found = RESEARCH_DOSSIERS.find((d) => d.id === selectedDossierId);
+      if (found) {
+        setActiveDossierId(selectedDossierId);
+        setIsMobileReaderOpen(true);
+      }
+    }
+  }, [selectedDossierId]);
 
   useEffect(() => {
     try {
@@ -267,6 +288,9 @@ export const DossiersScreen: React.FC<DossiersScreenProps> = ({
             isBookmarked={bookmarkedIds.includes(activeDossier.id)}
             onToggleBookmark={(e) => toggleBookmark(activeDossier.id, e)}
             onSelectLandmark={onSelectLandmark}
+            onNavigateToChronology={onNavigateToChronology}
+            onNavigateToCulture={onNavigateToCulture}
+            onStartJourney={onStartJourney}
             badge={getEvidenceTypeBadge(activeDossier.evidenceType)}
           />
         </div>
@@ -295,6 +319,18 @@ export const DossiersScreen: React.FC<DossiersScreenProps> = ({
                 setIsMobileReaderOpen(false);
                 if (onSelectLandmark) onSelectLandmark(id);
               }}
+              onNavigateToChronology={(dynastyId, epochId) => {
+                setIsMobileReaderOpen(false);
+                if (onNavigateToChronology) onNavigateToChronology(dynastyId, epochId);
+              }}
+              onNavigateToCulture={(culturalId, stateName) => {
+                setIsMobileReaderOpen(false);
+                if (onNavigateToCulture) onNavigateToCulture(culturalId, stateName);
+              }}
+              onStartJourney={(journeyId) => {
+                setIsMobileReaderOpen(false);
+                if (onStartJourney) onStartJourney(journeyId);
+              }}
               badge={getEvidenceTypeBadge(activeDossier.evidenceType)}
             />
           </div>
@@ -309,6 +345,9 @@ interface DossierReaderContentProps {
   isBookmarked: boolean;
   onToggleBookmark: (e: React.MouseEvent) => void;
   onSelectLandmark?: (landmarkId: string) => void;
+  onNavigateToChronology?: (dynastyId?: string, epochId?: string) => void;
+  onNavigateToCulture?: (culturalId?: string, stateName?: string) => void;
+  onStartJourney?: (journeyId: string) => void;
   badge: { label: string; bg: string };
 }
 
@@ -317,8 +356,14 @@ const DossierReaderContent: React.FC<DossierReaderContentProps> = ({
   isBookmarked,
   onToggleBookmark,
   onSelectLandmark,
+  onNavigateToChronology,
+  onNavigateToCulture,
+  onStartJourney,
   badge,
 }) => {
+  // Get related content from other sections
+  const relatedContent = getRelatedContentForDossier(dossier.id);
+
   return (
     <div className="bg-[#FAF7F2] border border-[#B8863B]/40 rounded-xs p-5 sm:p-6 shadow-xs space-y-6">
       {/* Top Meta Bar */}
@@ -468,6 +513,45 @@ const DossierReaderContent: React.FC<DossierReaderContentProps> = ({
               </div>
             ))}
           </div>
+        </div>
+      )}
+
+      {/* Cross-Section Navigation */}
+      {(relatedContent.landmark || relatedContent.chronology.length > 0 || relatedContent.culture.length > 0) && (
+        <div className="pt-4 border-t border-[#B8863B]/25 space-y-4">
+          <h4 className="label-caps text-[#A8422B] text-[11px] font-bold">
+            // CROSS-ARCHIVE CONNECTIONS
+          </h4>
+
+          {relatedContent.landmark && onSelectLandmark && (
+            <CrossNavigationPanel
+              title="Related Heritage Site (Cartography)"
+              links={[relatedContent.landmark]}
+              onNavigate={(link) => {
+                onSelectLandmark(link.id);
+              }}
+            />
+          )}
+
+          {relatedContent.chronology.length > 0 && onNavigateToChronology && (
+            <CrossNavigationPanel
+              title="Related Dynasties & Eras (Chronology)"
+              links={relatedContent.chronology}
+              onNavigate={(link) => {
+                onNavigateToChronology(link.id);
+              }}
+            />
+          )}
+
+          {relatedContent.culture.length > 0 && onNavigateToCulture && (
+            <CrossNavigationPanel
+              title="Related Living Traditions (Culture)"
+              links={relatedContent.culture}
+              onNavigate={(link) => {
+                onNavigateToCulture(link.id);
+              }}
+            />
+          )}
         </div>
       )}
 

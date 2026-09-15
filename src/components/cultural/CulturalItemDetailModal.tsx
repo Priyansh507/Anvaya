@@ -11,12 +11,16 @@ import {
   Layers,
   Scroll,
 } from 'lucide-react';
+import { getRelatedContentForCulture } from '../../utils/crossNavigation';
+import { CrossNavigationPanel, type CrossNavigationLink } from '../common/CrossNavigationPanel';
 
 interface CulturalItemDetailModalProps {
   item: CulturalItem;
   isExplored: boolean;
   onClose: () => void;
   onMarkExplored: (itemId: string, xp: number) => void;
+  onNavigateToCartography?: (landmarkId: string) => void;
+  onNavigateToChronology?: (dynastyId?: string, epochId?: string) => void;
 }
 
 export const CulturalItemDetailModal: React.FC<CulturalItemDetailModalProps> = ({
@@ -24,9 +28,14 @@ export const CulturalItemDetailModal: React.FC<CulturalItemDetailModalProps> = (
   isExplored,
   onClose,
   onMarkExplored,
+  onNavigateToCartography,
+  onNavigateToChronology,
 }) => {
   const [justExplored, setJustExplored] = useState(false);
   const [imageError, setImageError] = useState(false);
+
+  // Get related content from other sections
+  const relatedContent = getRelatedContentForCulture(item.id);
 
   // Keyboard shortcut: Escape to close
   useEffect(() => {
@@ -204,6 +213,37 @@ export const CulturalItemDetailModal: React.FC<CulturalItemDetailModalProps> = (
               ))}
             </div>
           </div>
+
+          {/* Cross-Section Navigation */}
+          {(relatedContent.landmarks.length > 0 || relatedContent.chronology.length > 0) && (
+            <div className="pt-4 border-t border-[#B8863B]/25 space-y-4">
+              <h4 className="label-caps text-[#A8422B] text-[11px] font-bold">
+                // CROSS-ARCHIVE CONNECTIONS
+              </h4>
+
+              {relatedContent.landmarks.length > 0 && onNavigateToCartography && (
+                <CrossNavigationPanel
+                  title="Related Heritage Sites (Cartography)"
+                  links={relatedContent.landmarks}
+                  onNavigate={(link) => {
+                    onClose();
+                    onNavigateToCartography(link.id);
+                  }}
+                />
+              )}
+
+              {relatedContent.chronology.length > 0 && onNavigateToChronology && (
+                <CrossNavigationPanel
+                  title="Related Dynasties & Eras (Chronology)"
+                  links={relatedContent.chronology}
+                  onNavigate={(link) => {
+                    onClose();
+                    onNavigateToChronology(link.id);
+                  }}
+                />
+              )}
+            </div>
+          )}
         </div>
 
         {/* Bottom Exploration & XP Award Action Bar */}

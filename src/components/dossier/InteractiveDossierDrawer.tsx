@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { HeritageLandmark, DrawerState, HistoricalJourney, CulturalItem } from '../../types';
 import { getJourneyByLandmarkId } from '../../data/historicalJourneys';
+import { getRelatedContentForLandmark } from '../../utils/crossNavigation';
 import {
   Volume2,
   Columns,
@@ -13,12 +14,15 @@ import {
   Scroll,
   Sparkles,
   ChevronRight,
+  ScrollText,
+  Layers,
 } from 'lucide-react';
 import { CoordinateChip } from '../common/CoordinateChip';
 import { EraBadge } from '../common/EraBadge';
 import { useLanguage } from '../../context/LanguageContext';
 import { StateCulturalItemsPanel } from '../cultural/StateCulturalItemsPanel';
 import { CulturalItemDetailModal } from '../cultural/CulturalItemDetailModal';
+import { CrossNavigationPanel } from '../common/CrossNavigationPanel';
 
 interface InteractiveDossierDrawerProps {
   landmark: HeritageLandmark | null;
@@ -30,6 +34,9 @@ interface InteractiveDossierDrawerProps {
   exploredCulturalIds?: string[];
   onExploreCulturalItem?: (itemId: string, xpReward: number) => void;
   onViewAllCulture?: (stateName: string) => void;
+  onNavigateToChronology?: (dynastyId?: string, epochId?: string) => void;
+  onNavigateToDossier?: (dossierId: string) => void;
+  onNavigateToCulture?: (culturalId?: string, stateName?: string) => void;
 }
 
 export const InteractiveDossierDrawer: React.FC<InteractiveDossierDrawerProps> = ({
@@ -42,6 +49,9 @@ export const InteractiveDossierDrawer: React.FC<InteractiveDossierDrawerProps> =
   exploredCulturalIds = [],
   onExploreCulturalItem,
   onViewAllCulture,
+  onNavigateToChronology,
+  onNavigateToDossier,
+  onNavigateToCulture,
 }) => {
   const { language, t, getLandmarkTranslation } = useLanguage();
   const [activeTab, setActiveTab] = useState<'history' | 'architecture' | 'audio' | 'culture'>('history');
@@ -52,6 +62,7 @@ export const InteractiveDossierDrawer: React.FC<InteractiveDossierDrawerProps> =
 
   const availableJourney = getJourneyByLandmarkId(landmark.id);
   const lTrans = getLandmarkTranslation(landmark.id);
+  const relatedContent = getRelatedContentForLandmark(landmark.id);
 
   // Drawer height styles based on snap state
   const heightStyles = {
@@ -319,6 +330,56 @@ export const InteractiveDossierDrawer: React.FC<InteractiveDossierDrawerProps> =
                     ))}
                   </div>
                 </div>
+
+                {/* Cross-Section Navigation: Related Content */}
+                {(relatedContent.dossiers.length > 0 || relatedContent.chronology.length > 0 || relatedContent.culture.length > 0) && (
+                  <div className="pt-4 border-t border-[#B8863B]/20 space-y-4">
+                    <h4 className="label-caps text-[#684300] text-[10px] font-bold flex items-center gap-1.5">
+                      <Layers className="w-3 h-3 text-[#B8863B]" />
+                      EXPLORE RELATED CONTENT
+                    </h4>
+
+                    {relatedContent.dossiers.length > 0 && onNavigateToDossier && (
+                      <CrossNavigationPanel
+                        title="Research Dossiers & Evidence"
+                        links={relatedContent.dossiers.slice(0, 2)}
+                        onNavigate={(link) => {
+                          if (link.type === 'dossier') {
+                            onNavigateToDossier(link.id);
+                          }
+                        }}
+                      />
+                    )}
+
+                    {relatedContent.chronology.length > 0 && onNavigateToChronology && (
+                      <CrossNavigationPanel
+                        title="Historical Period & Dynasty"
+                        links={relatedContent.chronology.slice(0, 1)}
+                        onNavigate={(link) => {
+                          if (link.type === 'chronology') {
+                            onNavigateToChronology(link.id);
+                          }
+                        }}
+                      />
+                    )}
+
+                    {relatedContent.culture.length > 0 && (onNavigateToCulture || onViewAllCulture) && (
+                      <CrossNavigationPanel
+                        title="Living Cultural Traditions"
+                        links={relatedContent.culture.slice(0, 2)}
+                        onNavigate={(link) => {
+                          if (link.type === 'culture') {
+                            if (onNavigateToCulture) {
+                              onNavigateToCulture(link.id);
+                            } else if (onViewAllCulture) {
+                              onViewAllCulture(landmark.state || '');
+                            }
+                          }
+                        }}
+                      />
+                    )}
+                  </div>
+                )}
               </div>
             )}
 

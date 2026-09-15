@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { CulturalCategory, CulturalItem } from '../../types';
 import {
   CULTURAL_CATEGORIES,
@@ -26,12 +26,18 @@ interface CulturalExplorerScreenProps {
   exploredItemIds: string[];
   onExploreItem: (itemId: string, xpReward: number) => void;
   userXp: number;
+  selectedItemId?: string | null;
+  onNavigateToCartography?: (landmarkId: string) => void;
+  onNavigateToChronology?: (dynastyId?: string, epochId?: string) => void;
 }
 
 export const CulturalExplorerScreen: React.FC<CulturalExplorerScreenProps> = ({
   exploredItemIds,
   onExploreItem,
   userXp: _userXp,
+  selectedItemId,
+  onNavigateToCartography,
+  onNavigateToChronology,
 }) => {
   const [selectedCategory, setSelectedCategory] = useState<CulturalCategory | 'all'>('all');
   const [searchQuery, setSearchQuery] = useState('');
@@ -39,6 +45,16 @@ export const CulturalExplorerScreen: React.FC<CulturalExplorerScreenProps> = ({
   const [selectedState, setSelectedState] = useState<string>('all');
   const [viewMode, setViewMode] = useState<'statewise' | 'grid'>('statewise');
   const [activeItem, setActiveItem] = useState<CulturalItem | null>(null);
+
+  // Sync selected cultural item from cross-navigation
+  useEffect(() => {
+    if (selectedItemId) {
+      const found = CULTURAL_ITEMS.find((c) => c.id === selectedItemId);
+      if (found) {
+        setActiveItem(found);
+      }
+    }
+  }, [selectedItemId]);
 
   const categoriesWithCounts = useMemo(() => getCulturalCategories(), []);
 
@@ -418,6 +434,8 @@ export const CulturalExplorerScreen: React.FC<CulturalExplorerScreenProps> = ({
           onMarkExplored={(itemId, xp) => {
             onExploreItem(itemId, xp);
           }}
+          onNavigateToCartography={onNavigateToCartography}
+          onNavigateToChronology={onNavigateToChronology}
         />
       )}
     </div>

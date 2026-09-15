@@ -17,6 +17,10 @@ export default function App() {
   const [currentScreen, setCurrentScreen] = useState<ScreenType>('explore');
   const [isSearchOpen, setIsSearchOpen] = useState<boolean>(false);
   const [selectedLandmarkId, setSelectedLandmarkId] = useState<string | null>(null);
+  const [selectedCulturalId, setSelectedCulturalId] = useState<string | null>(null);
+  const [selectedDynastyId, setSelectedDynastyId] = useState<string | null>(null);
+  const [selectedEpochId, setSelectedEpochId] = useState<string | null>(null);
+  const [selectedDossierId, setSelectedDossierId] = useState<string | null>(null);
   const [activeJourney, setActiveJourney] = useState<HistoricalJourney | null>(null);
   const [userXp, setUserXp] = useState<number>(350);
   const [unlockedBadges, setUnlockedBadges] = useState<string[]>([]);
@@ -62,25 +66,56 @@ export default function App() {
     'journey-archives': 'Historical Journey Archives',
   };
 
-  const handleSelectLandmarkFromSearch = (landmark: HeritageLandmark) => {
-    setSelectedLandmarkId(landmark.id);
+  const handleNavigateToCartography = (landmarkId: string) => {
+    setSelectedLandmarkId(landmarkId);
     setCurrentScreen('explore');
+  };
+
+  const handleNavigateToCulture = (culturalId?: string, stateName?: string) => {
+    if (culturalId) {
+      setSelectedCulturalId(culturalId);
+    }
+    setCurrentScreen('cultural');
+  };
+
+  const handleNavigateToChronology = (dynastyId?: string, epochId?: string) => {
+    if (dynastyId) setSelectedDynastyId(dynastyId);
+    if (epochId) setSelectedEpochId(epochId);
+    setCurrentScreen('chronology');
+  };
+
+  const handleNavigateToDossier = (dossierId: string) => {
+    setSelectedDossierId(dossierId);
+    setCurrentScreen('dossiers');
+  };
+
+  const handleNavigateToJourney = (journeyId: string) => {
+    const found = HISTORICAL_JOURNEYS.find((j) => j.id === journeyId);
+    if (found) {
+      setActiveJourney(found);
+    }
+    setCurrentScreen('journey-archives');
+  };
+
+  const handleSelectLandmarkFromSearch = (landmark: HeritageLandmark) => {
+    handleNavigateToCartography(landmark.id);
   };
 
   const handleSelectArtifactFromSearch = (_artifact: Artifact) => {
     setCurrentScreen('cultural');
   };
 
-  const handleSelectEraFromSearch = (_era: ChronologyEra) => {
+  const handleSelectEraFromSearch = (era: ChronologyEra) => {
+    setSelectedEpochId(era.id);
     setCurrentScreen('chronology');
   };
 
-  const handleSelectCulturalItemFromSearch = (_cultural: CulturalItem) => {
-    setCurrentScreen('cultural');
+  const handleSelectCulturalItemFromSearch = (cultural: CulturalItem) => {
+    handleNavigateToCulture(cultural.id);
   };
 
-  const handleSelectDossierFromSearch = (_dossier: FieldDossier) => {
-    setCurrentScreen('dossiers');
+  const handleSelectDossierFromSearch = (dossier: FieldDossier) => {
+    handleNavigateToDossier(dossier.id);
   };
 
   const handleCompleteJourney = (awardedXp: number, badgeId: string) => {
@@ -118,6 +153,9 @@ export default function App() {
                 setActiveJourney(journey);
                 setCurrentScreen('journey-archives');
               }}
+              onNavigateToChronology={handleNavigateToChronology}
+              onNavigateToDossier={handleNavigateToDossier}
+              onNavigateToCulture={handleNavigateToCulture}
             />
           )}
           {currentScreen === 'cultural' && (
@@ -125,31 +163,30 @@ export default function App() {
               exploredItemIds={exploredCulturalIds}
               onExploreItem={handleAwardCulturalXp}
               userXp={userXp}
+              selectedItemId={selectedCulturalId}
+              onNavigateToCartography={handleNavigateToCartography}
+              onNavigateToChronology={handleNavigateToChronology}
             />
           )}
           {currentScreen === 'vitrine' && <VitrineScreen />}
           {currentScreen === 'passport' && <PassportScreen />}
           {currentScreen === 'chronology' && (
             <ChronologyScreen
-              onSelectLandmark={(landmarkId) => {
-                setSelectedLandmarkId(landmarkId);
-                setCurrentScreen('explore');
-              }}
-              onStartJourney={(journeyId) => {
-                const found = HISTORICAL_JOURNEYS.find((j) => j.id === journeyId);
-                if (found) {
-                  setActiveJourney(found);
-                }
-                setCurrentScreen('journey-archives');
-              }}
+              selectedEpochId={selectedEpochId}
+              selectedDynastyId={selectedDynastyId}
+              onSelectLandmark={handleNavigateToCartography}
+              onStartJourney={handleNavigateToJourney}
+              onNavigateToDossier={handleNavigateToDossier}
+              onNavigateToCulture={handleNavigateToCulture}
             />
           )}
           {currentScreen === 'dossiers' && (
             <DossiersScreen
-              onSelectLandmark={(landmarkId) => {
-                setSelectedLandmarkId(landmarkId);
-                setCurrentScreen('explore');
-              }}
+              selectedDossierId={selectedDossierId}
+              onSelectLandmark={handleNavigateToCartography}
+              onNavigateToChronology={handleNavigateToChronology}
+              onNavigateToCulture={handleNavigateToCulture}
+              onStartJourney={handleNavigateToJourney}
             />
           )}
           {currentScreen === 'journey-archives' && (
@@ -158,8 +195,7 @@ export default function App() {
               userXp={userXp}
               unlockedBadges={unlockedBadges}
               onBackToMap={() => {
-                setSelectedLandmarkId('brihadisvara-thanjavur');
-                setCurrentScreen('explore');
+                handleNavigateToCartography(activeJourney?.landmarkId || 'brihadisvara-thanjavur');
               }}
               onCompleteJourney={handleCompleteJourney}
             />

@@ -33,6 +33,9 @@ interface ExploreScreenProps {
   exploredCulturalIds?: string[];
   onExploreCulturalItem?: (itemId: string, xpReward: number) => void;
   onNavigateToCultureWithState?: (stateName: string) => void;
+  onNavigateToChronology?: (dynastyId?: string, epochId?: string) => void;
+  onNavigateToDossier?: (dossierId: string) => void;
+  onNavigateToCulture?: (culturalId?: string, stateName?: string) => void;
 }
 
 export const ExploreScreen: React.FC<ExploreScreenProps> = ({
@@ -43,6 +46,9 @@ export const ExploreScreen: React.FC<ExploreScreenProps> = ({
   exploredCulturalIds = [],
   onExploreCulturalItem,
   onNavigateToCultureWithState,
+  onNavigateToChronology,
+  onNavigateToDossier,
+  onNavigateToCulture,
 }) => {
   const { language, t, getLandmarkTranslation } = useLanguage();
   const [selectedLandmark, setSelectedLandmark] = useState<HeritageLandmark | null>(
@@ -336,12 +342,17 @@ export const ExploreScreen: React.FC<ExploreScreenProps> = ({
               exploredCulturalIds={exploredCulturalIds}
               onExploreCulturalItem={onExploreCulturalItem}
               onViewAllCulture={(stateName) => {
-                if (onNavigateToCultureWithState) {
+                if (onNavigateToCulture) {
+                  onNavigateToCulture(undefined, stateName);
+                } else if (onNavigateToCultureWithState) {
                   onNavigateToCultureWithState(stateName);
                 } else {
                   handleOpenStateCultureModal(stateName);
                 }
               }}
+              onNavigateToChronology={onNavigateToChronology}
+              onNavigateToDossier={onNavigateToDossier}
+              onNavigateToCulture={onNavigateToCulture}
             />
           </div>
         )}
@@ -358,12 +369,17 @@ export const ExploreScreen: React.FC<ExploreScreenProps> = ({
         exploredCulturalIds={exploredCulturalIds}
         onExploreCulturalItem={onExploreCulturalItem}
         onViewAllCulture={(stateName) => {
-          if (onNavigateToCultureWithState) {
+          if (onNavigateToCulture) {
+            onNavigateToCulture(undefined, stateName);
+          } else if (onNavigateToCultureWithState) {
             onNavigateToCultureWithState(stateName);
           } else {
             handleOpenStateCultureModal(stateName);
           }
         }}
+        onNavigateToChronology={onNavigateToChronology}
+        onNavigateToDossier={onNavigateToDossier}
+        onNavigateToCulture={onNavigateToCulture}
       />
 
       {/* State Culture Modal: Opens on map state click or culture button */}
@@ -375,6 +391,13 @@ export const ExploreScreen: React.FC<ExploreScreenProps> = ({
           exploredItemIds={exploredCulturalIds}
           onExploreItem={onExploreCulturalItem}
           onNavigateToCulturalScreen={onNavigateToCultureWithState}
+          onNavigateToCartography={(landmarkId) => {
+            const landmark = HERITAGE_LANDMARKS.find((l) => l.id === landmarkId);
+            if (landmark) {
+              handleSelectLandmark(landmark);
+            }
+          }}
+          onNavigateToChronology={onNavigateToChronology}
         />
       )}
     </div>

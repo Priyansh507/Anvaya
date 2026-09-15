@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CHRONOLOGY_EPOCHS } from '../../data/chronologyData';
 import { ChronologyEra, ChronologyDynasty } from '../../types';
+import { getRelatedContentForDynasty } from '../../utils/crossNavigation';
 import {
   Hourglass,
   Landmark,
@@ -13,20 +14,30 @@ import {
   ArrowRight,
   Shield,
   History,
+  Layers,
 } from 'lucide-react';
 import { EraBadge } from '../common/EraBadge';
+import { CrossNavigationPanel } from '../common/CrossNavigationPanel';
 
 interface ChronologyScreenProps {
+  selectedEpochId?: string | null;
+  selectedDynastyId?: string | null;
   onSelectLandmark?: (landmarkId: string) => void;
   onStartJourney?: (journeyId: string) => void;
+  onNavigateToDossier?: (dossierId: string) => void;
+  onNavigateToCulture?: (culturalId?: string, stateName?: string) => void;
 }
 
 export const ChronologyScreen: React.FC<ChronologyScreenProps> = ({
+  selectedEpochId: propEpochId,
+  selectedDynastyId: propDynastyId,
   onSelectLandmark,
   onStartJourney,
+  onNavigateToDossier,
+  onNavigateToCulture,
 }) => {
   const [selectedEpochId, setSelectedEpochId] = useState<string>(
-    'epoch-medieval-renaissance'
+    propEpochId || 'epoch-medieval-renaissance'
   );
 
   const activeEpoch: ChronologyEra =
@@ -35,12 +46,33 @@ export const ChronologyScreen: React.FC<ChronologyScreenProps> = ({
   const dynasties: ChronologyDynasty[] = activeEpoch.dynasties || [];
 
   const [selectedDynastyId, setSelectedDynastyId] = useState<string>(
-    dynasties[0]?.id || ''
+    propDynastyId || dynasties[0]?.id || ''
   );
+
+  // Sync with prop changes if passed
+  useEffect(() => {
+    if (propEpochId) {
+      setSelectedEpochId(propEpochId);
+    }
+    if (propDynastyId) {
+      // Find epoch that owns this dynasty
+      for (const ep of CHRONOLOGY_EPOCHS) {
+        if (ep.dynasties?.some((d) => d.id === propDynastyId)) {
+          setSelectedEpochId(ep.id);
+          setSelectedDynastyId(propDynastyId);
+          break;
+        }
+      }
+    }
+  }, [propEpochId, propDynastyId]);
 
   // Keep selected dynasty in sync when epoch changes
   const activeDynasty: ChronologyDynasty | undefined =
     dynasties.find((d) => d.id === selectedDynastyId) || dynasties[0];
+
+  const relatedContent = activeDynasty
+    ? getRelatedContentForDynasty(activeDynasty.id, activeEpoch.id)
+    : { landmarks: [], culture: [], journeys: [] };
 
   const handleSelectEpoch = (epoch: ChronologyEra) => {
     setSelectedEpochId(epoch.id);
@@ -247,27 +279,51 @@ export const ChronologyScreen: React.FC<ChronologyScreenProps> = ({
                       </div>
 
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        {activeDynasty.keyRulers.map((ruler, rIdx) => (
-                          <div
-                            key={rIdx}
-                            className="p-3.5 bg-[#F3ECE2]/60 border border-[#B8863B]/30 rounded-xs hover:border-[#B8863B] transition-colors"
-                          >
-                            <div className="flex items-center justify-between gap-1">
-                              <h5 className="font-serif-display font-bold text-sm text-[#191B21]">
-                                {ruler.name}
-                              </h5>
-                              <span className="text-[10px] font-mono text-[#882B16] font-semibold">
-                                {ruler.reign}
-                              </span>
+                        {activeDynasty.keyRulers.map((ruler, rIdx) => {
+                          const matchingJourney = relatedContent.journeys.find(
+                            (j) => j.label.toLowerCase().includes(ruler.name.split(' ')[0].toLowerCase()) ||
+                                   ruler.name.toLowerCase().includes(j.label.toLowerCase())
+                          );
+
+                          return (
+                            <div
+                              key={rIdx}
+                              className="p-3.5 bg-[#F3ECE2]/60 border border-[#B8863B]/30 rounded-xs hover:border-[#B8863B] transition-colors flex flex-col justify-between"
+                            >
+                              <div>
+                                <div className="flex items-center justify-between gap-1">
+                                  <h5 className="font-serif-display font-bold text-sm text-[#191B21]">
+                                    {ruler.name}
+                                  </h5>
+                                  <span className="text-[10px] font-mono text-[#882B16] font-semibold">
+                                    {ruler.reign}
+                                  </span>
+                                </div>
+                                <div className="text-[11px] font-medium text-[#684300] mt-0.5">
+                                  {ruler.title}
+                                </div>
+                                <p className="text-xs text-[#57423D] mt-2 leading-relaxed">
+                                  {ruler.significance}
+                                </p>
+                              </div>
+
+                              {matchingJourney && onStartJourney && (
+                                <button
+                                  onClick={() => onStartJourney(matchingJourney.id)}
+                                  className="mt-3 w-full py-1.5 px-2 bg-[#A8422B] hover:bg-[#882B16] text-[#FAF7F2] font-serif-display font-bold text-xs rounded-xs flex items-center justify-between transition-colors shadow-xs cursor-pointer"
+                                >
+                                  <span className="flex items-center gap-1">
+                                    <Sparkles className="w-3 h-3 text-[#FFD9A9]" />
+                                    <span>Historical Journey</span>
+                                  </span>
+                                  <span className="text-[10px] font-mono text-[#FFD9A9]">
+                                    {matchingJourney.subtitle}
+                                  </span>
+                                </button>
+                              )}
                             </div>
-                            <div className="text-[11px] font-medium text-[#684300] mt-0.5">
-                              {ruler.title}
-                            </div>
-                            <p className="text-xs text-[#57423D] mt-2 leading-relaxed">
-                              {ruler.significance}
-                            </p>
-                          </div>
-                        ))}
+                          );
+                        })}
                       </div>
                     </div>
                   )}
@@ -370,6 +426,35 @@ export const ChronologyScreen: React.FC<ChronologyScreenProps> = ({
                           </div>
                         ))}
                       </div>
+                    </div>
+                  )}
+
+                  {/* Cross-Section Navigation: Dossiers & Culture */}
+                  {relatedContent.dossiers.length > 0 && onNavigateToDossier && (
+                    <div className="pt-2">
+                      <CrossNavigationPanel
+                        title="Related Research Dossiers"
+                        links={relatedContent.dossiers.slice(0, 2)}
+                        onNavigate={(link) => {
+                          if (link.type === 'dossier') {
+                            onNavigateToDossier(link.id);
+                          }
+                        }}
+                      />
+                    </div>
+                  )}
+
+                  {relatedContent.culture.length > 0 && onNavigateToCulture && (
+                    <div className="pt-2">
+                      <CrossNavigationPanel
+                        title="Related Cultural Heritage"
+                        links={relatedContent.culture.slice(0, 2)}
+                        onNavigate={(link) => {
+                          if (link.type === 'culture') {
+                            onNavigateToCulture(link.id);
+                          }
+                        }}
+                      />
                     </div>
                   )}
 
