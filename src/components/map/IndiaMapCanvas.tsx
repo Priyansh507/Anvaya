@@ -21,6 +21,7 @@ interface IndiaMapCanvasProps {
   onSelectLandmark: (landmark: HeritageLandmark) => void;
   onStartJourney?: (journey: HistoricalJourney) => void;
   onUnavailableJourney?: (landmark: HeritageLandmark) => void;
+  onOpenStateCulture?: (stateName: string) => void;
 }
 
 export const IndiaMapCanvas: React.FC<IndiaMapCanvasProps> = ({
@@ -29,6 +30,7 @@ export const IndiaMapCanvas: React.FC<IndiaMapCanvasProps> = ({
   onSelectLandmark,
   onStartJourney,
   onUnavailableJourney,
+  onOpenStateCulture,
 }) => {
   const { language, t, getLandmarkTranslation } = useLanguage();
 
@@ -373,11 +375,28 @@ export const IndiaMapCanvas: React.FC<IndiaMapCanvasProps> = ({
                   }
                   stroke={isActive ? '#A8422B' : isHovered ? '#B8863B' : '#C7B195'}
                   strokeWidth={isActive ? 1.5 : isHovered ? 1.2 : 0.75}
-                  className="transition-colors duration-150 cursor-pointer"
+                  className="transition-colors duration-150 cursor-pointer hover:opacity-90"
                   onMouseEnter={() => setHoveredState(loc.name)}
                   onMouseLeave={() => setHoveredState(null)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    // Find landmark matching state
+                    const matchingLandmark = landmarks.find((l) => {
+                      const st = l.state || l.region;
+                      return (
+                        st.toLowerCase().includes(loc.name.toLowerCase()) ||
+                        loc.name.toLowerCase().includes(st.toLowerCase()) ||
+                        LANDMARK_SVG_COORDINATES[l.id]?.stateId === loc.id
+                      );
+                    });
+                    if (matchingLandmark) {
+                      onSelectLandmark(matchingLandmark);
+                    } else if (onOpenStateCulture) {
+                      onOpenStateCulture(loc.name);
+                    }
+                  }}
                 >
-                  <title>{loc.name}</title>
+                  <title>{loc.name} - Click to explore</title>
                 </path>
               );
             })}
@@ -577,7 +596,7 @@ export const IndiaMapCanvas: React.FC<IndiaMapCanvasProps> = ({
 
       {/* Active Landmark Focus Card (Bottom-Left Float) */}
       {selectedLandmark && (
-        <div className="absolute bottom-4 left-4 z-20 hidden md:flex items-center gap-3 bg-[#FAF7F2]/95 border border-[#B8863B]/40 px-3.5 py-2 rounded-xs shadow-md backdrop-blur-xs max-w-sm">
+        <div className="absolute bottom-4 left-4 z-20 hidden md:flex items-center gap-3 bg-[#FAF7F2]/95 border border-[#B8863B]/40 px-3.5 py-2 rounded-xs shadow-md backdrop-blur-xs max-w-md">
           <div className="w-9 h-9 rounded-xs overflow-hidden shrink-0 border border-[#B8863B]/50">
             <img
               src={selectedLandmark.imageUrl}
@@ -596,25 +615,46 @@ export const IndiaMapCanvas: React.FC<IndiaMapCanvasProps> = ({
               {selectedLandmarkTranslation?.region || selectedLandmark.region}
             </span>
           </div>
-          {hasHistoricalJourney(selectedLandmark.id) && onStartJourney ? (
-            <button
-              onClick={() => {
-                const j = getJourneyByLandmarkId(selectedLandmark.id);
-                if (j && onStartJourney) onStartJourney(j);
-              }}
-              className="ml-auto shrink-0 px-2.5 py-1 bg-[#A8422B] text-white text-[9.5px] font-mono font-bold tracking-wider uppercase rounded-xs hover:bg-[#C25438] transition-colors flex items-center gap-1 cursor-pointer"
-            >
-              <Scroll className="w-3 h-3 text-[#FFD9A9]" />
-              <span>{t('journey_archives_short')}</span>
-            </button>
-          ) : (
-            <button
-              onClick={() => onUnavailableJourney && onUnavailableJourney(selectedLandmark)}
-              className="ml-auto shrink-0 px-2 py-1 bg-[#F3ECE2] text-[#882B16] border border-[#B8863B]/40 text-[9px] font-mono font-bold tracking-wider uppercase rounded-xs hover:bg-[#FAF7F2] transition-colors cursor-pointer"
-            >
-              <span>{t('archive_soon_short')}</span>
-            </button>
-          )}
+
+          <div className="ml-auto flex items-center gap-1.5 shrink-0">
+            {/* Culture Tab / Button */}
+            {onOpenStateCulture && (
+              <button
+                onClick={() => {
+                  const st =
+                    selectedLandmark.state ||
+                    selectedLandmark.region.split(',').pop()?.trim() ||
+                    '';
+                  onOpenStateCulture(st);
+                }}
+                className="px-2.5 py-1 bg-[#1A2744] hover:bg-[#2C3852] text-[#FFD9A9] text-[9.5px] font-mono font-bold tracking-wider uppercase rounded-xs border border-[#B8863B]/40 transition-colors flex items-center gap-1 cursor-pointer shadow-xs"
+                title="View living culture & artisans for this state"
+              >
+                <Sparkles className="w-3 h-3 text-[#FFD9A9]" />
+                <span>Culture</span>
+              </button>
+            )}
+
+            {hasHistoricalJourney(selectedLandmark.id) && onStartJourney ? (
+              <button
+                onClick={() => {
+                  const j = getJourneyByLandmarkId(selectedLandmark.id);
+                  if (j && onStartJourney) onStartJourney(j);
+                }}
+                className="px-2.5 py-1 bg-[#A8422B] text-white text-[9.5px] font-mono font-bold tracking-wider uppercase rounded-xs hover:bg-[#C25438] transition-colors flex items-center gap-1 cursor-pointer"
+              >
+                <Scroll className="w-3 h-3 text-[#FFD9A9]" />
+                <span>{t('journey_archives_short')}</span>
+              </button>
+            ) : (
+              <button
+                onClick={() => onUnavailableJourney && onUnavailableJourney(selectedLandmark)}
+                className="px-2 py-1 bg-[#F3ECE2] text-[#882B16] border border-[#B8863B]/40 text-[9px] font-mono font-bold tracking-wider uppercase rounded-xs hover:bg-[#FAF7F2] transition-colors cursor-pointer"
+              >
+                <span>{t('archive_soon_short')}</span>
+              </button>
+            )}
+          </div>
         </div>
       )}
 

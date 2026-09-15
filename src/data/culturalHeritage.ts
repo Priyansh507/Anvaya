@@ -105,6 +105,48 @@ export const CULTURAL_ITEMS: CulturalItem[] = [
     primaryElements: ['Tribal Morungs', 'Log Drumming', 'Hornbill Headdresses', 'Spear Chants'],
     xpReward: 40,
   },
+  {
+    id: 'ratha-yatra-odisha',
+    name: 'Puri Jagannath Ratha Yatra',
+    nativeName: 'ରଥଯାତ୍ରା (Rathayātrā)',
+    category: 'festivals',
+    region: 'Eastern India',
+    state: 'Odisha',
+    shortDescription:
+      'The world-renowned festival of colossal wooden chariots carrying Lord Jagannath, Balabhadra, and Subhadra along the Grand Road of Puri, built anew each year without iron nails.',
+    historicalSignificance:
+      'Documented in ancient Puranas, Brahma Purana, and medieval Ganga dynasty palm-leaf inscriptions. The King of Puri performs the Chhera Pahanra—sweeping the chariot floors with a golden broom to signify equality before divinity.',
+    culturalSignificance:
+      'Represents the democratisation of the divine where the deities step out of the sanctum sanctorum into public streets to meet all people regardless of social distinction.',
+    relatedTradition:
+      'Maharana woodcarvers constructing Nandighosha chariot, Gotipua dance offerings, and Pahandi ceremonial swaying carrying of deities.',
+    imageUrl:
+      'https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?auto=format&fit=crop&w=900&q=80',
+    timePeriodOrOrigin: 'Antiquity; 12th Century CE Ganga Dynasty',
+    primaryElements: ['Colossal Wooden Chariots', 'Chhera Pahanra Gold Broom', 'Gotipua Acrobatics', 'Mahaprasad Feast'],
+    xpReward: 40,
+  },
+  {
+    id: 'ganesh-utsav-maharashtra',
+    name: 'Maharashtra Ganeshotsav & Dhol Tasha',
+    nativeName: 'गणेशोत्सव (Gaṇeśotsav)',
+    category: 'festivals',
+    region: 'Western India',
+    state: 'Maharashtra',
+    shortDescription:
+      'A ten-day grand celebration featuring towering clay Ganesha idols, rhythmic Dhol Tasha percussion pathaks, and energetic public immersion processions across Pune and Mumbai.',
+    historicalSignificance:
+      'Celebrated since the times of Chhatrapati Shivaji Maharaj and the Peshwas, transformed in 1893 by freedom fighter Lokmanya Bal Gangadhar Tilak into a public patriotic platform uniting communities against colonial rule.',
+    culturalSignificance:
+      'Combines devotion, social discourse, theatre, traditional martial Lezim dances, and massive synchronized percussive troops playing ancient rhythms.',
+    relatedTradition:
+      'Shadu Mati natural clay idol crafting, Dhol Tasha Pathak rehearsals, Modak culinary offerings, and Visarjan processions.',
+    imageUrl:
+      'https://images.unsplash.com/photo-1567157577867-05ccb1388e66?auto=format&fit=crop&w=900&q=80',
+    timePeriodOrOrigin: '17th Century Maratha Era; Public Revival 1893 CE',
+    primaryElements: ['Dhol Tasha Pathaks', 'Shadu Clay Sculpting', 'Ukadiche Modak', 'Lezim Folk Dance'],
+    xpReward: 40,
+  },
 
   // ==========================================
   // 2. FOOD & CUISINE
@@ -172,6 +214,48 @@ export const CULTURAL_ITEMS: CulturalItem[] = [
     primaryElements: ['Clay Oven Baking', 'Pure Desi Ghee', 'Panchmel Dal (5 Lentils)', 'Sweetened Churma'],
     xpReward: 40,
   },
+  {
+    id: 'chhena-poda-odisha',
+    name: 'Chhena Poda & Jagannath Chhappan Bhog',
+    nativeName: 'ଛେନାପୋଡ଼ (Chhēnāpōḍ଼)',
+    category: 'food-cuisine',
+    region: 'Eastern India',
+    state: 'Odisha',
+    shortDescription:
+      'The legendary caramelized baked cheese dessert of Nayagarh, Odisha, slow-roasted wrapped in Sal leaves overnight, alongside ancient temple culinary traditions.',
+    historicalSignificance:
+      'Odisha is the historic birthplace of Chhena-based confectionery and the sacred Chhappan Bhog (56 dishes) offered at the Jagannath Temple in Puri since the 12th century.',
+    culturalSignificance:
+      'Known as the "Indian Cheesecake", its smoky caramelized crust and cardamon-infused cottage cheese core represent a harmonious balance of Ayurvedic culinary principles and agrarian milk surplus management.',
+    relatedTradition:
+      'Wrapping in aromatic Sal (Shorea robusta) leaves, charcoal hearth baking, and temple kitchen clay pot boiling using ancient solar and lunar timings.',
+    imageUrl:
+      'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?auto=format&fit=crop&w=900&q=80',
+    timePeriodOrOrigin: '12th Century CE Puri Temple Tradition',
+    primaryElements: ['Fresh Cow Chhena', 'Sal Leaf Wrapping', 'Charcoal Hearth Baking', 'Cardamom & Jaggery'],
+    xpReward: 40,
+  },
+  {
+    id: 'litti-chokha-bihar',
+    name: 'Bihari Litti Chokha & Sattu Traditions',
+    nativeName: 'लिट्टी चोखा (Liṭṭī Chokhā)',
+    category: 'food-cuisine',
+    region: 'Eastern India',
+    state: 'Bihar',
+    shortDescription:
+      'Nutrient-dense roasted whole wheat balls stuffed with spiced roasted gram flour (Sattu) and herbs, paired with wood-smoked eggplant, tomato, and potato chokha.',
+    historicalSignificance:
+      'Sattu and Litti date back to the ancient Magadha Empire. Historical chronicles record that Mauryan soldiers and Buddhist monks carried Sattu on long overland expeditions across Asia due to its non-perishable high-protein nature.',
+    culturalSignificance:
+      'Celebrates agrarian rustic cooking where open cow-dung dung fires (Upala) impart an unmistakable earthy smoky flavour. Sattu is affectionately revered as the "Power Food of Bihar".',
+    relatedTradition:
+      'Upala (dung cake) fire pit roasting, crushing freshly roasted litti and plunging into hot mustard oil or pure desi ghee, with mustard-spiced green chili chutney.',
+    imageUrl:
+      'https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=900&q=80',
+    timePeriodOrOrigin: 'Magadha Empire Antiquity / 6th Century BCE',
+    primaryElements: ['Roasted Gram (Sattu)', 'Kalonji & Ajwain Spicing', 'Smoked Baingan Chokha', 'Desi Ghee Immersion'],
+    xpReward: 40,
+  },
 
   // ==========================================
   // 3. MUSIC & INSTRUMENTS
@@ -182,7 +266,7 @@ export const CULTURAL_ITEMS: CulturalItem[] = [
     nativeName: 'रुद्र वीणा (Rudra Vīṇā)',
     category: 'music-instruments',
     region: 'North & Central India',
-    state: 'Uttar Pradesh / Madhya Pradesh',
+    state: 'Uttar Pradesh',
     shortDescription:
       'The supreme and most ancient chordophone of Indian classical music, featuring a long tubular body of teakwood supported by two enormous resonators made of dried gourds (tumbas).',
     historicalSignificance:
@@ -239,6 +323,27 @@ export const CULTURAL_ITEMS: CulturalItem[] = [
     primaryElements: ['Manamadurai Clay & Brass Filings', 'Gumuki Bass Techniques', 'Carnatic Tala Cycles', 'Tamarind Kiln Firing'],
     xpReward: 40,
   },
+  {
+    id: 'mardala-odisha',
+    name: 'Mardala Odissi Percussion',
+    nativeName: 'ମର୍ଦ୍ଦଳ (Mardala)',
+    category: 'music-instruments',
+    region: 'Eastern India',
+    state: 'Odisha',
+    shortDescription:
+      'The sacred two-headed wooden barrel drum of Odisha sculpted on the temple walls of Konark and Jagannath, accompanying classical Odissi dance and music.',
+    historicalSignificance:
+      'Carved intricately on the 13th-century Natya Mandapa of Konark Sun Temple. Described in classical treatises like Natya Shastra and Sangeeta Narayana as the supreme rhythm instrument of Utkala.',
+    culturalSignificance:
+      'Produces deep sonorous tonal nuances essential for depicting the fluid sculpturesque Tribhanga postures of Odissi classical dance and devotional Gita Govinda recitations.',
+    relatedTradition:
+      'Karantha wood body carving, buffalo hide membrane tuning with iron ore paste (Kharan), and temple seva at Jagannath Temple.',
+    imageUrl:
+      'https://images.unsplash.com/photo-1511192336575-5a79af67a629?auto=format&fit=crop&w=900&q=80',
+    timePeriodOrOrigin: 'Ancient Temple Sculptural Evidence; 2nd Century BCE onward',
+    primaryElements: ['Karantha Wood Barrel', 'Iron-Ore Tuning Paste', 'Odissi Tala Cycles', 'Temple Natya Accompaniment'],
+    xpReward: 40,
+  },
 
   // ==========================================
   // 4. ARTS & CRAFTS
@@ -290,7 +395,7 @@ export const CULTURAL_ITEMS: CulturalItem[] = [
     name: 'Bidriware Metal Inlay',
     nativeName: 'ಬಿದ್ರಿ ಕಲೆ (Bidri Craft)',
     category: 'arts-crafts',
-    region: 'Deccan Plateau',
+    region: 'South India',
     state: 'Karnataka',
     shortDescription:
       'A 600-year-old metallurgical craft of encrusting pure silver wire and sheets into a blackened zinc and copper alloy that undergoes a miraculous soil-oxidation treatment.',
@@ -304,6 +409,69 @@ export const CULTURAL_ITEMS: CulturalItem[] = [
       'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=900&q=80',
     timePeriodOrOrigin: '14th Century CE Bahmani Sultanate',
     primaryElements: ['Pure Silver Wire Inlay', 'Zinc-Copper Alloy Base', 'Bidar Fort Soil Oxidation', 'Floral Arabesque Chasing'],
+    xpReward: 40,
+  },
+  {
+    id: 'pattachitra-odisha',
+    name: 'Pattachitra Palm Leaf & Cloth Painting',
+    nativeName: 'ପଟ୍ଟଚିତ୍ର (Paṭṭacitra)',
+    category: 'arts-crafts',
+    region: 'Eastern India',
+    state: 'Odisha',
+    shortDescription:
+      'Intricate mythological paintings on treated cotton cloth or etched palm leaves (Tala Pattachitra), drawn with natural stone minerals and lampblack.',
+    historicalSignificance:
+      'Practiced since the 5th century BCE in the heritage craft village of Raghurajpur. Originally painted as Anasara Patti during the period when Jagannath sanctum deities remain sequestered before Ratha Yatra.',
+    culturalSignificance:
+      'Recognized for razor-sharp brushwork, natural pigments made from conch shells, Hingula (cinnabar), and Haritala, depicting episodes from Ramayana, Mahabharata, and Gita Govinda.',
+    relatedTradition:
+      'Etching with iron stylus (Lekhani) on dried palm leaves, tamarind seed paste cloth priming, and natural lacquer finishing.',
+    imageUrl:
+      'https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=900&q=80',
+    timePeriodOrOrigin: '5th Century BCE / Medieval Puri Guilds',
+    primaryElements: ['Conch Shell White Pigment', 'Palm Leaf Etching (Lekhani)', 'Tamarind Seed Gum Glue', 'Gita Govinda Panels'],
+    xpReward: 40,
+  },
+  {
+    id: 'warli-painting-maharashtra',
+    name: 'Warli Indigenous Tribal Art',
+    nativeName: 'वारली चित्रकला (Vārlī Citrakalā)',
+    category: 'arts-crafts',
+    region: 'Western India',
+    state: 'Maharashtra',
+    shortDescription:
+      'One of India’s oldest living tribal art forms, utilizing rudimentary geometric shapes—circles, triangles, and squares—to depict agrarian harmony and cosmic dances on mud walls.',
+    historicalSignificance:
+      'Practiced by the indigenous Warli tribe in the Sahyadri mountains of northern Maharashtra since 2500–3000 BCE, preserving Neolithic rock art idioms directly into vernacular mud houses.',
+    culturalSignificance:
+      'Does not depict mythological gods but rather Mother Earth (Palaghata), harvesting, tree worship, and the iconic Tarpa spiral dance where tribal dancers form a spiral honoring the cycle of nature.',
+    relatedTradition:
+      'Rice flour paste white paint, bamboo twig pens, cow-dung red ochre mud wall preparation, and wedding chowk rituals.',
+    imageUrl:
+      'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=900&q=80',
+    timePeriodOrOrigin: 'Neolithic Traditions; c. 2500 BCE Roots',
+    primaryElements: ['Rice Flour White Pigment', 'Tarpa Spiral Dance Motifs', 'Red Geru Mud Background', 'Mother Palaghata Icons'],
+    xpReward: 40,
+  },
+  {
+    id: 'gond-art-madhya-pradesh',
+    name: 'Gond Tribal Art of Patangarh',
+    nativeName: 'गोंड चित्रकला (Goṇḍ Citrakalā)',
+    category: 'arts-crafts',
+    region: 'Central India',
+    state: 'Madhya Pradesh',
+    shortDescription:
+      'Hypnotic, nature-inspired visual folklore painted by the Gond tribe using intricate signature patterns of dots, dashes, and scales over luminous wildlife and tree motifs.',
+    historicalSignificance:
+      'Created by the Pardhan Gond bards of Dindori, Madhya Pradesh. Legendary artist Jangarh Singh Shyam pioneered a contemporary Renaissance in the 1980s, bringing sacred Mahua tree and forest animism to global art museums.',
+    culturalSignificance:
+      'Guided by the belief that "viewing a good image brings good fortune" (Bitti Chitra). Every master artist possesses a unique personal pattern stroke inherited through ancestral memory.',
+    relatedTradition:
+      'Pardhan bard song storytelling, natural plant & mud pigments, and Digna house floor blessing geometric designs.',
+    imageUrl:
+      'https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=900&q=80',
+    timePeriodOrOrigin: 'Antiquity Tribal Folklore; Modern Revival 1980s',
+    primaryElements: ['Signature Dot & Dash Textures', 'Tree of Life (Mahua)', 'Forest Animal Totems', 'Natural Mud Pigments'],
     xpReward: 40,
   },
 
@@ -373,6 +541,69 @@ export const CULTURAL_ITEMS: CulturalItem[] = [
     primaryElements: ['Korvai Interlocking Borders', 'Temple Spire (Gopuram) Motifs', 'Three-Ply Mulberry Silk', 'Heavy Gold Zari'],
     xpReward: 40,
   },
+  {
+    id: 'chanderi-silk-mp',
+    name: 'Chanderi Gossamer Silk & Zari',
+    nativeName: 'चंदेरी साड़ी (Chanderī Sāṛī)',
+    category: 'clothing-textiles',
+    region: 'Central India',
+    state: 'Madhya Pradesh',
+    shortDescription:
+      'Sheer, feather-light textiles woven from degummed raw silk and fine cotton with gold zari bootis, praised for centuries as "woven air".',
+    historicalSignificance:
+      'Referenced in the Mahabharata as founded by Lord Krishna’s cousin Shishupal. Flourished under the patronage of the Bundela Rajputs, Malwa Sultans, and the Scindia royal court of Gwalior.',
+    culturalSignificance:
+      'Known for its translucent texture, delicate hand-spun zari borders, and geometric motifs inspired by Bundelkhand fortress lattices and flora.',
+    relatedTradition:
+      'Dobby and jacquard pit-loom weaving, gold and silver zari thread spinning, and generational weaver mohallas of historic Chanderi town.',
+    imageUrl:
+      'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=900&q=80',
+    timePeriodOrOrigin: '13th Century CE Sultanate & Bundela Era',
+    primaryElements: ['Gossamer Raw Silk Weft', 'Real Zari Bootis', 'Ashrafi Gold Coin Motifs', 'Handloom Pit Weaving'],
+    xpReward: 40,
+  },
+  {
+    id: 'paithani-silk-maharashtra',
+    name: 'Paithani Royal Silk & Peacock Pallu',
+    nativeName: 'पैठणी (Paiṭhaṇī)',
+    category: 'clothing-textiles',
+    region: 'Western India',
+    state: 'Maharashtra',
+    shortDescription:
+      'Regal gold and silk sarees crafted in Paithan featuring tapestry-woven peacock (Mor), lotus, and parrot motifs with kaleidoscopic iridescent borders.',
+    historicalSignificance:
+      'Dates back to the Satavahana Empire in the 2nd century BCE when Paithan (Pratishthana) was a global trade hub exporting fine silks to the Roman Empire. Later patronized by the Peshwas of Pune.',
+    culturalSignificance:
+      'Revered as the "Queen of Silks" in Maharashtrian heritage. Takes months to weave by hand using interlocking weft tapestry techniques where the design looks identical on both front and back sides.',
+    relatedTradition:
+      'Tapestry weaving (Dhala) technique, pure gold zari warp, and classic Narali (coconut) border motifs.',
+    imageUrl:
+      'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=900&q=80',
+    timePeriodOrOrigin: 'Satavahana Dynasty (200 BCE) & Peshwa Era',
+    primaryElements: ['Peacock (Mor) Pallu', 'Pure Gold Zari Weft', 'Tapestry Weaving Technique', 'Satavahana Heritage'],
+    xpReward: 40,
+  },
+  {
+    id: 'patan-patola-gujarat',
+    name: 'Patan Patola Double Ikat',
+    nativeName: 'પાટણના પટોળા (Pāṭaṇnā Paṭōḷā)',
+    category: 'clothing-textiles',
+    region: 'Western India',
+    state: 'Gujarat',
+    shortDescription:
+      'The pinnacle of complex geometric handloom weaving where both warp and weft threads are precisely resist-dyed before weaving so the pattern matches with mathematical perfection.',
+    historicalSignificance:
+      'In the 12th century CE, King Kumarapala of the Solanki dynasty brought 700 master Salvi weavers from Maharashtra and Karnataka to settle in Patan to create sacred silk textiles for temple rituals.',
+    culturalSignificance:
+      'Known in Gujarati folklore as "Padi Patole Bhaat, Phate Pan Fite Nahi" (The design on the Patola may tear with age, but its color will never fade). Woven by only four surviving master families today.',
+    relatedTradition:
+      'Mathematical graph calculation, tying tiny cotton threads on silk hanks for multi-color natural dyeing, and rosewood hand-looms with tilt adjustments.',
+    imageUrl:
+      'https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=900&q=80',
+    timePeriodOrOrigin: '12th Century CE Solanki / Chaulukya Dynasty',
+    primaryElements: ['Double Ikat Resist Dyeing', 'Salvi Guild Craftsmanship', 'Natural Madder & Indigo Dyes', 'Geometric Animal Motifs'],
+    xpReward: 40,
+  },
 
   // ==========================================
   // 6. ARCHITECTURE
@@ -383,7 +614,7 @@ export const CULTURAL_ITEMS: CulturalItem[] = [
     nativeName: 'વાવ (Vāv / Baoli)',
     category: 'architecture',
     region: 'Western India',
-    state: 'Gujarat / Rajasthan',
+    state: 'Gujarat',
     shortDescription:
       'Monumental multi-storey inverted subterranean temples descending deep into the earth to reach groundwater aquifers, lined with hundreds of carved stone pavilions and sacred sculptures.',
     historicalSignificance:
@@ -507,6 +738,132 @@ export const CULTURAL_ITEMS: CulturalItem[] = [
     primaryElements: ['Ivory-Wood (Aale Mara)', 'Vegetable-Dye Lacquer', 'Hand-Lathe Woodturning', 'Heritage Monument Models'],
     xpReward: 40,
   },
+  {
+    id: 'raghurajpur-chitrakars-odisha',
+    name: 'Raghurajpur Heritage Chitrakar Guild',
+    nativeName: 'ରଘୁରାଜପୁର ଚିତ୍ରକାର (Raghurājpūr Citrakāra)',
+    category: 'artisans',
+    region: 'Eastern India',
+    state: 'Odisha',
+    shortDescription:
+      'A legendary heritage craft village near Puri where every household is an artisan atelier practicing Pattachitra painting, palm-leaf engraving, cow-dung toys, and stone carving.',
+    historicalSignificance:
+      'Preserved continuously for over a millennium as the official artist village supplying ritual paintings for the Puri Jagannath Temple. Declared India’s first designated Heritage Crafts Village in 2000.',
+    culturalSignificance:
+      'The Chitrakars use natural pigments derived from burnt coconut shells, yellow stones, and sea conches. Visitors can interact directly with National Award-winning master artisans in their open courtyard studios and acquire authentic GI-tagged Odishan art.',
+    relatedTradition:
+      'Gotipua traditional acrobatic dance rehearsals in the village akhada, palm leaf stylus etching, and generationally transmitted iconography rules.',
+    imageUrl:
+      'https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=900&q=80',
+    timePeriodOrOrigin: 'Millennia-old Guild Heritage / India Heritage Village',
+    primaryElements: ['Open Studio Village', 'Palm Leaf Lekhani Etchings', 'Natural Stone Pigments', 'Temple Artisan Guilds'],
+    xpReward: 40,
+  },
+  {
+    id: 'swamimalai-bronze-casters-tn',
+    name: 'Swamimalai Chola Bronze Sthapathis',
+    nativeName: 'சுவாமிமலை வெண்கலச் சிற்பிகள் (Swāmimalai Bronze Guild)',
+    category: 'artisans',
+    region: 'South India',
+    state: 'Tamil Nadu',
+    shortDescription:
+      'Hereditary bronze sculptors (Sthapathis) of Swamimalai preserving the 1000-year-old Chola lost-wax casting technique (Cire Perdue) to craft celestial Natarajas and temple bronzes.',
+    historicalSignificance:
+      'Tracing their direct lineage to the royal sculptors commissioned by King Rajaraja Chola I to cast bronze icons for the Brihadisvara Temple in 1010 CE. The craft holds a prestigious Geographical Indication (GI) tag.',
+    culturalSignificance:
+      'Following strict Shilpa Shastra proportional canons (Talamana), artisans carve wax models with beeswax, dammar resin, and groundnut oil, encase them in alluvial clay from the Kaveri River, melt the wax, and pour molten Ashtadhatu bronze alloys.',
+    relatedTradition:
+      'Kaveri riverbed alluvial clay moulding, lost-wax molten metal casting, hand-chasing with hardened steel chisels, and ritual consecration (Prana Pratishtha).',
+    imageUrl:
+      'https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=900&q=80',
+    timePeriodOrOrigin: '10th–11th Century Chola Golden Age; Living Guild',
+    primaryElements: ['Lost-Wax (Cire Perdue)', 'Kaveri Alluvial Clay Molds', 'Ashtadhatu Bronze Alloys', 'Shilpa Shastra Proportions'],
+    xpReward: 40,
+  },
+  {
+    id: 'kolhapuri-chappal-artisans-mh',
+    name: 'Kolhapur Heritage Leather Guild',
+    nativeName: 'कोल्हापूरी चप्पल (Kolhāpūrī Chappal)',
+    category: 'artisans',
+    region: 'Western India',
+    state: 'Maharashtra',
+    shortDescription:
+      'Master craftsmen of Kolhapur handcrafting vegetable-tanned, intricately braided and punched leather footwear using natural babool bark dyes and hand-stitched leather cords without nails.',
+    historicalSignificance:
+      'Traced to the 12th century CE under King Bijjala of the Kalachuri dynasty. Later patronized and popularized by Chhatrapati Shahu Maharaj of Kolhapur in the early 20th century.',
+    culturalSignificance:
+      'Renowned for durability, ergonomic foot arch comfort, distinctive squeak (Chuk-Chuk sound created with hard seeds), and ornamental braided straps (Gonda). Artisans sell authentic handcrafted footwear directly in local Kolhapur bazaars.',
+    relatedTradition:
+      'Vegetable tanning with natural Harada & Babool extracts, manual punching with iron punches (Bari), and hand-braiding with leather thongs.',
+    imageUrl:
+      'https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=900&q=80',
+    timePeriodOrOrigin: '12th Century CE / Shahu Maharaj Patronage; GI Tagged',
+    primaryElements: ['Vegetable-Tanned Leather', 'Babool Bark Dyes', 'Zero-Nail Cord Stitching', 'Hand-Braided Straps'],
+    xpReward: 40,
+  },
+  {
+    id: 'bagh-print-artisans-mp',
+    name: 'Bagh Woodblock Print Artisans',
+    nativeName: 'बाग प्रिंट (Bāgh Print)',
+    category: 'artisans',
+    region: 'Central India',
+    state: 'Madhya Pradesh',
+    shortDescription:
+      'Traditional Khatri block-printers of Bagh town who hand-stamp geometric and floral patterns onto handloom cotton and silk using hand-carved teakwood blocks and natural mineral-iron dyes.',
+    historicalSignificance:
+      'The Khatri community migrated to Bagh in Dhar district along the Baghini river over 400 years ago, drawing inspiration from the ancient 5th-century Buddhist frescoes of the nearby Bagh Caves.',
+    culturalSignificance:
+      'Distinguished by a signature bold red and black color palette obtained from natural alizarin (madder root) and fermented rusted iron filings (Dhao-ka-phool). The mineral-rich waters of the Baghini river act as a natural mordant.',
+    relatedTradition:
+      'Hand-carved Sheesham & Teak woodblocks, multiple water washing stages in the Baghini river, and copper vat boiling with Dhawada flowers.',
+    imageUrl:
+      'https://images.unsplash.com/photo-1578925518470-4def7a0f08bb?auto=format&fit=crop&w=900&q=80',
+    timePeriodOrOrigin: '16th Century CE Khatri Settlement; GI Tagged',
+    primaryElements: ['Carved Teakwood Blocks', 'Fermented Iron Black Dye', 'Baghini River Mineral Washing', 'Bagh Cave Floral Motifs'],
+    xpReward: 40,
+  },
+  {
+    id: 'sikki-grass-artisans-bihar',
+    name: 'Sikki Golden Grass Weavers',
+    nativeName: 'सिकी घास शिल्प (Sikkī Ghās Śilpa)',
+    category: 'artisans',
+    region: 'Eastern India',
+    state: 'Bihar',
+    shortDescription:
+      'Women artisans of Mithila who harvest wild golden Sikki grass from riverbeds to coil and weave luminous containers, deity figures, and traditional bridal dowry boxes (Pauti).',
+    historicalSignificance:
+      'Practiced since Vedic antiquity in rural North Bihar where Sikki grass grows wild in swampy wetlands. Preserved by women as a vital matrilineal craft and artistic expression.',
+    culturalSignificance:
+      'Revered as "Golden Grass of Mithila" for its natural metallic luster. Traditionally given by mothers to brides as blessings of prosperity and household abundance. Artisans create baskets, trays, and sculptural toys using a single iron needle (Takua).',
+    relatedTradition:
+      'Monsoon wetland grass harvesting, natural mineral-dye boiling, and coiled co-weaving with Munj grass core using Takua needles.',
+    imageUrl:
+      'https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=900&q=80',
+    timePeriodOrOrigin: 'Vedic Antiquity / Mithila Matrilineal Heritage; GI Tagged',
+    primaryElements: ['Wild Golden Sikki Grass', 'Takua Needle Weaving', 'Pauti Bridal Baskets', 'Natural Vegetable Dyes'],
+    xpReward: 40,
+  },
+  {
+    id: 'kutch-rogan-artisans-gujarat',
+    name: 'Kutch Rogan Painting of Nirona',
+    nativeName: 'રોગન ચિત્રકામ (Rōgan Citrakāma)',
+    category: 'artisans',
+    region: 'Western India',
+    state: 'Gujarat',
+    shortDescription:
+      'A rare, mesmerizing 400-year-old textile art practiced by the Khatri family of Nirona village, who paint freehand with castor oil paste using a thin metal stylus without touching the fabric.',
+    historicalSignificance:
+      'Originated in Persia and brought to Kutch through Sindh about 400 years ago. Today, only one master family (the Khatris of Nirona, led by Padma Shri Abdul Gafur Khatri) keeps this endangered art alive.',
+    culturalSignificance:
+      'Boiled castor oil is heated for two days until it forms a thick elastic paste (Rogan), mixed with natural stone pigments. The artist spins a thread of paint on a metal stylus in the palm and guides it into air-drawn Tree of Life murals, then folds the cloth in half to create a miraculous mirror-symmetry.',
+    relatedTradition:
+      'Castor oil boiling process, stylus thread spinning on palm skin, and mirror-fold symmetry printing onto silk fabrics.',
+    imageUrl:
+      'https://images.unsplash.com/photo-1599661046827-dacff0c0f09a?auto=format&fit=crop&w=900&q=80',
+    timePeriodOrOrigin: '16th Century Persian-Sindh Roots; GI Tagged',
+    primaryElements: ['Boiled Castor Oil Paste', 'Stylus Air-Painting', 'Mirror-Fold Symmetry', 'Tree of Life Motifs'],
+    xpReward: 40,
+  },
 ];
 
 export const getCulturalItemsByCategory = (
@@ -527,4 +884,28 @@ export const getCulturalCategories = (): CulturalCategoryMeta[] => {
     ...cat,
     itemCount: CULTURAL_ITEMS.filter((item) => item.category === cat.id).length,
   }));
+};
+
+export const getCulturalItemsByState = (state: string): CulturalItem[] => {
+  if (!state) return [];
+  const normalizedState = state.toLowerCase().trim();
+  return CULTURAL_ITEMS.filter((item) => {
+    const itemState = item.state.toLowerCase();
+    const itemRegion = item.region.toLowerCase();
+    return (
+      itemState.includes(normalizedState) ||
+      normalizedState.includes(itemState) ||
+      itemRegion.includes(normalizedState)
+    );
+  });
+};
+
+export const getUniqueStates = (): string[] => {
+  const states = new Set<string>();
+  CULTURAL_ITEMS.forEach((item) => states.add(item.state));
+  return Array.from(states).sort();
+};
+
+export const getStateItemCount = (state: string): number => {
+  return getCulturalItemsByState(state).length;
 };

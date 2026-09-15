@@ -7,7 +7,9 @@ import { EraBadge } from '../common/EraBadge';
 import { InteractiveDossierDrawer } from '../dossier/InteractiveDossierDrawer';
 import { DesktopDossierSidebar } from '../dossier/DesktopDossierSidebar';
 import { IndiaMapCanvas } from '../map/IndiaMapCanvas';
+import { StateCultureModal } from '../cultural/StateCultureModal';
 import { useLanguage } from '../../context/LanguageContext';
+import { getUniqueStates } from '../../data/culturalHeritage';
 import {
   Layers,
   Crosshair,
@@ -20,6 +22,7 @@ import {
   ArrowRight,
   PanelRightClose,
   PanelRightOpen,
+  ChevronDown,
 } from 'lucide-react';
 
 interface ExploreScreenProps {
@@ -27,12 +30,19 @@ interface ExploreScreenProps {
   onOpenArtifacts?: () => void;
   selectedLandmarkId?: string | null;
   onStartJourney?: (journey: HistoricalJourney) => void;
+  exploredCulturalIds?: string[];
+  onExploreCulturalItem?: (itemId: string, xpReward: number) => void;
+  onNavigateToCultureWithState?: (stateName: string) => void;
 }
 
 export const ExploreScreen: React.FC<ExploreScreenProps> = ({
   onOpenSearch,
+  onOpenArtifacts,
   selectedLandmarkId,
   onStartJourney,
+  exploredCulturalIds = [],
+  onExploreCulturalItem,
+  onNavigateToCultureWithState,
 }) => {
   const { language, t, getLandmarkTranslation } = useLanguage();
   const [selectedLandmark, setSelectedLandmark] = useState<HeritageLandmark | null>(
@@ -42,6 +52,7 @@ export const ExploreScreen: React.FC<ExploreScreenProps> = ({
   const [isDesktopSidebarOpen, setIsDesktopSidebarOpen] = useState<boolean>(true);
   const [activeFilter, setActiveFilter] = useState<string>('all');
   const [unavailableNotice, setUnavailableNotice] = useState<{ landmark: HeritageLandmark } | null>(null);
+  const [selectedStateForCultureModal, setSelectedStateForCultureModal] = useState<string | null>(null);
 
   const dynasticFilters = [
     { id: 'all', labelKey: 'dynasty_all', defaultLabel: 'All Dynasties' },
@@ -51,6 +62,8 @@ export const ExploreScreen: React.FC<ExploreScreenProps> = ({
     { id: 'ganga', labelKey: 'dynasty_ganga', defaultLabel: 'Eastern Ganga', landmarkId: 'konark-sun-temple' },
     { id: 'maurya', labelKey: 'dynasty_maurya', defaultLabel: 'Maurya & Buddhist', landmarkId: 'sanchi-stupa' },
   ];
+
+  const availableStatesForCulture = getUniqueStates();
 
   // Sync with external selection from Search Archive
   useEffect(() => {
@@ -119,7 +132,16 @@ export const ExploreScreen: React.FC<ExploreScreenProps> = ({
     setUnavailableNotice({ landmark });
   };
 
+  const handleOpenStateCultureModal = (stateName: string) => {
+    setSelectedStateForCultureModal(stateName);
+  };
+
   const noticeTranslation = unavailableNotice ? getLandmarkTranslation(unavailableNotice.landmark.id) : null;
+
+  const currentLandmarkState =
+    selectedLandmark?.state ||
+    selectedLandmark?.region.split(',').pop()?.trim() ||
+    'Tamil Nadu';
 
   return (
     <div className="relative w-full h-[calc(100vh-105px)] lg:h-[calc(100vh-53px)] overflow-hidden flex flex-col bg-[#FAF7F2]">
@@ -137,6 +159,19 @@ export const ExploreScreen: React.FC<ExploreScreenProps> = ({
           </div>
 
           <div className="flex items-center gap-2">
+            {/* Quick State Culture Tab / Button for Current Selected State */}
+            {selectedLandmark && (
+              <button
+                onClick={() => handleOpenStateCultureModal(currentLandmarkState)}
+                className="flex items-center gap-1.5 px-2.5 py-1 text-[11px] font-mono rounded-xs border border-[#B8863B]/50 bg-[#1A2744] hover:bg-[#2C3852] text-[#FFD9A9] transition-all cursor-pointer shadow-xs"
+                title={`Open cultural artifacts & artisans for ${currentLandmarkState}`}
+              >
+                <Sparkles className="w-3.5 h-3.5 text-[#FFD9A9]" />
+                <span className="hidden sm:inline">{currentLandmarkState} Culture</span>
+                <span className="sm:hidden">Culture</span>
+              </button>
+            )}
+
             {/* Toggle Dossier Sidebar Button (Laptop only) */}
             {selectedLandmark && (
               <button
@@ -169,7 +204,7 @@ export const ExploreScreen: React.FC<ExploreScreenProps> = ({
           </div>
         </div>
 
-        {/* Filter Chips */}
+        {/* Filter Chips & State Quick Links */}
         <div className="max-w-7xl mx-auto w-full flex items-center gap-1.5 overflow-x-auto pb-0.5 subtle-scroll">
           {dynasticFilters.map((f) => {
             const count =
@@ -206,6 +241,23 @@ export const ExploreScreen: React.FC<ExploreScreenProps> = ({
               </button>
             );
           })}
+
+          <div className="h-4 w-[1px] bg-[#B8863B]/30 mx-1 shrink-0" />
+
+          {/* Direct State Culture Shortcut Pills */}
+          <span className="text-[9.5px] font-mono uppercase text-[#8A726C] shrink-0 flex items-center gap-1">
+            <Sparkles className="w-2.5 h-2.5 text-[#B8863B]" /> State Culture:
+          </span>
+          {availableStatesForCulture.map((st) => (
+            <button
+              key={st}
+              onClick={() => handleOpenStateCultureModal(st)}
+              className="shrink-0 px-2 py-0.5 text-[9.5px] font-mono rounded-xs bg-[#FAF7F2] hover:bg-[#FAF2EB] text-[#57423D] hover:text-[#882B16] border border-[#B8863B]/25 hover:border-[#A8422B] transition-colors cursor-pointer"
+              title={`View ${st} artifacts and artisans`}
+            >
+              {st}
+            </button>
+          ))}
         </div>
       </div>
 
@@ -269,6 +321,7 @@ export const ExploreScreen: React.FC<ExploreScreenProps> = ({
             onSelectLandmark={handleSelectLandmark}
             onStartJourney={onStartJourney}
             onUnavailableJourney={handleUnavailableJourney}
+            onOpenStateCulture={handleOpenStateCultureModal}
           />
         </div>
 
@@ -280,6 +333,15 @@ export const ExploreScreen: React.FC<ExploreScreenProps> = ({
               onClose={() => setIsDesktopSidebarOpen(false)}
               onStartJourney={onStartJourney}
               onUnavailableJourney={handleUnavailableJourney}
+              exploredCulturalIds={exploredCulturalIds}
+              onExploreCulturalItem={onExploreCulturalItem}
+              onViewAllCulture={(stateName) => {
+                if (onNavigateToCultureWithState) {
+                  onNavigateToCultureWithState(stateName);
+                } else {
+                  handleOpenStateCultureModal(stateName);
+                }
+              }}
             />
           </div>
         )}
@@ -293,7 +355,28 @@ export const ExploreScreen: React.FC<ExploreScreenProps> = ({
         onClose={() => setDrawerState('closed')}
         onStartJourney={onStartJourney}
         onUnavailableJourney={handleUnavailableJourney}
+        exploredCulturalIds={exploredCulturalIds}
+        onExploreCulturalItem={onExploreCulturalItem}
+        onViewAllCulture={(stateName) => {
+          if (onNavigateToCultureWithState) {
+            onNavigateToCultureWithState(stateName);
+          } else {
+            handleOpenStateCultureModal(stateName);
+          }
+        }}
       />
+
+      {/* State Culture Modal: Opens on map state click or culture button */}
+      {selectedStateForCultureModal && (
+        <StateCultureModal
+          stateName={selectedStateForCultureModal}
+          isOpen={true}
+          onClose={() => setSelectedStateForCultureModal(null)}
+          exploredItemIds={exploredCulturalIds}
+          onExploreItem={onExploreCulturalItem}
+          onNavigateToCulturalScreen={onNavigateToCultureWithState}
+        />
+      )}
     </div>
   );
 };

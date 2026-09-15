@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { HeritageLandmark, HistoricalJourney } from '../../types';
+import { HeritageLandmark, HistoricalJourney, CulturalItem } from '../../types';
 import { getJourneyByLandmarkId } from '../../data/historicalJourneys';
 import {
   Volume2,
@@ -18,12 +18,17 @@ import {
 import { CoordinateChip } from '../common/CoordinateChip';
 import { EraBadge } from '../common/EraBadge';
 import { useLanguage } from '../../context/LanguageContext';
+import { StateCulturalItemsPanel } from '../cultural/StateCulturalItemsPanel';
+import { CulturalItemDetailModal } from '../cultural/CulturalItemDetailModal';
 
 interface DesktopDossierSidebarProps {
   landmark: HeritageLandmark | null;
   onClose: () => void;
   onStartJourney?: (journey: HistoricalJourney) => void;
   onUnavailableJourney?: (landmark: HeritageLandmark) => void;
+  exploredCulturalIds?: string[];
+  onExploreCulturalItem?: (itemId: string, xpReward: number) => void;
+  onViewAllCulture?: (stateName: string) => void;
 }
 
 export const DesktopDossierSidebar: React.FC<DesktopDossierSidebarProps> = ({
@@ -31,10 +36,14 @@ export const DesktopDossierSidebar: React.FC<DesktopDossierSidebarProps> = ({
   onClose,
   onStartJourney,
   onUnavailableJourney,
+  exploredCulturalIds = [],
+  onExploreCulturalItem,
+  onViewAllCulture,
 }) => {
   const { language, t, getLandmarkTranslation } = useLanguage();
-  const [activeTab, setActiveTab] = useState<'history' | 'architecture' | 'audio'>('history');
+  const [activeTab, setActiveTab] = useState<'history' | 'architecture' | 'audio' | 'culture'>('history');
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
+  const [selectedCulturalItem, setSelectedCulturalItem] = useState<CulturalItem | null>(null);
 
   if (!landmark) return null;
 
@@ -112,10 +121,10 @@ export const DesktopDossierSidebar: React.FC<DesktopDossierSidebarProps> = ({
       </div>
 
       {/* Tabs Switcher */}
-      <div className="flex items-center border-b border-[#B8863B]/20 bg-[#F3ECE2]/60 px-3 shrink-0">
+      <div className="flex items-center border-b border-[#B8863B]/20 bg-[#F3ECE2]/60 px-3 shrink-0 overflow-x-auto no-scrollbar">
         <button
           onClick={() => setActiveTab('history')}
-          className={`flex items-center gap-1.5 py-2.5 px-3 text-xs font-semibold tracking-wider uppercase border-b-2 transition-colors cursor-pointer ${
+          className={`flex items-center gap-1.5 py-2.5 px-3 text-xs font-semibold tracking-wider uppercase border-b-2 transition-colors cursor-pointer shrink-0 ${
             activeTab === 'history'
               ? 'border-[#A8422B] text-[#882B16] bg-[#FAF7F2]'
               : 'border-transparent text-[#8A726C] hover:text-[#191B21]'
@@ -126,7 +135,7 @@ export const DesktopDossierSidebar: React.FC<DesktopDossierSidebarProps> = ({
         </button>
         <button
           onClick={() => setActiveTab('architecture')}
-          className={`flex items-center gap-1.5 py-2.5 px-3 text-xs font-semibold tracking-wider uppercase border-b-2 transition-colors cursor-pointer ${
+          className={`flex items-center gap-1.5 py-2.5 px-3 text-xs font-semibold tracking-wider uppercase border-b-2 transition-colors cursor-pointer shrink-0 ${
             activeTab === 'architecture'
               ? 'border-[#A8422B] text-[#882B16] bg-[#FAF7F2]'
               : 'border-transparent text-[#8A726C] hover:text-[#191B21]'
@@ -137,7 +146,7 @@ export const DesktopDossierSidebar: React.FC<DesktopDossierSidebarProps> = ({
         </button>
         <button
           onClick={() => setActiveTab('audio')}
-          className={`flex items-center gap-1.5 py-2.5 px-3 text-xs font-semibold tracking-wider uppercase border-b-2 transition-colors cursor-pointer ${
+          className={`flex items-center gap-1.5 py-2.5 px-3 text-xs font-semibold tracking-wider uppercase border-b-2 transition-colors cursor-pointer shrink-0 ${
             activeTab === 'audio'
               ? 'border-[#A8422B] text-[#882B16] bg-[#FAF7F2]'
               : 'border-transparent text-[#8A726C] hover:text-[#191B21]'
@@ -145,6 +154,17 @@ export const DesktopDossierSidebar: React.FC<DesktopDossierSidebarProps> = ({
         >
           <Volume2 className="w-3.5 h-3.5" />
           <span>{t('tab_audio')}</span>
+        </button>
+        <button
+          onClick={() => setActiveTab('culture')}
+          className={`flex items-center gap-1.5 py-2.5 px-3 text-xs font-semibold tracking-wider uppercase border-b-2 transition-colors cursor-pointer shrink-0 ${
+            activeTab === 'culture'
+              ? 'border-[#A8422B] text-[#882B16] bg-[#FAF7F2]'
+              : 'border-transparent text-[#8A726C] hover:text-[#191B21]'
+          }`}
+        >
+          <Sparkles className="w-3.5 h-3.5 text-[#B8863B]" />
+          <span>Culture</span>
         </button>
       </div>
 
@@ -295,7 +315,33 @@ export const DesktopDossierSidebar: React.FC<DesktopDossierSidebarProps> = ({
             </div>
           </div>
         )}
+
+        {/* TAB: CULTURE & ARTISANS */}
+        {activeTab === 'culture' && (
+          <div className="space-y-4 animate-fade-in">
+            <StateCulturalItemsPanel
+              stateName={landmark.state || landmark.region.split(',').pop()?.trim() || ''}
+              exploredItemIds={exploredCulturalIds}
+              onSelectItem={(item) => setSelectedCulturalItem(item)}
+              onViewAllCulture={() => onViewAllCulture && onViewAllCulture(landmark.state || landmark.region.split(',').pop()?.trim() || '')}
+            />
+          </div>
+        )}
       </div>
+
+      {/* Cultural Item Modal if clicked */}
+      {selectedCulturalItem && (
+        <CulturalItemDetailModal
+          item={selectedCulturalItem}
+          isExplored={exploredCulturalIds.includes(selectedCulturalItem.id)}
+          onClose={() => setSelectedCulturalItem(null)}
+          onMarkExplored={(itemId, xp) => {
+            if (onExploreCulturalItem) {
+              onExploreCulturalItem(itemId, xp);
+            }
+          }}
+        />
+      )}
     </aside>
   );
 };
